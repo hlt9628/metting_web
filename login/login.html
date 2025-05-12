@@ -267,6 +267,15 @@
 </div>
 
 <script>
+    window.onload = function () {
+        document.getElementById('remember-me').checked=false;
+        if (localStorage.getItem('userEmail') !== ''|| localStorage.getItem('userPassword') !== ''){
+            document.getElementById('login-email').value = localStorage.getItem('userEmail');
+            document.getElementById('login-password').value = localStorage.getItem('userPassword');
+            document.getElementById('remember-me').checked=localStorage.getItem('rememberMe');
+        }
+
+    }
     // 表单切换功能
     document.addEventListener('DOMContentLoaded', function() {
         const loginTab = document.getElementById('login-tab');
@@ -373,7 +382,6 @@
                     const userEmail = document.getElementById('login-email').value;
                     const userPassword = document.getElementById('login-password').value;
                     const rememberMe = document.getElementById('remember-me').checked;
-
                     // 简单表单验证
                     if (!userEmail.match(/^\w+@\w+\.\w+$/i) || !userPassword) {
                         showToast('请填写正确的邮箱和密码', 'error');
@@ -401,10 +409,11 @@
                         const data = await response.json();
 
                         if (data.code==200) {
-                            localStorage.setItem('token', data.data);
+                            localStorage.setItem('token', data.data[1]);
                             if (rememberMe == true){
-                                localStorage.setItem('userEmail',userEmail)
-                                localStorage.setItem('userPassword',userPassword)
+                                localStorage.setItem('userEmail',userEmail);
+                                localStorage.setItem('userPassword',userPassword);
+                                localStorage.setItem('rememberMe',true);
                             }
                             showToast('登录成功！正在跳转...', 'success');
 
@@ -438,7 +447,9 @@
                         showToast('请填写所有必填字段', 'error');
                         return;
                     }
-
+                    if (!userEmail.match(/^\w+@\w+\.\w+$/i) || userPassword.length<5){
+                        showToast('请输入正确的邮件或密码格式，','error')
+                    }
                     if (userPassword !== confirmPassword) {
                         showToast('两次输入的密码不匹配', 'error');
                         return;
@@ -463,15 +474,14 @@
 
                         const data = await response.json();
 
-                        if (response.ok) {
-                            showToast('注册成功！请查收验证邮件', 'success');
-
+                        if (data.code==200) {
+                            showToast('注册成功!', 'success');
                             // 自动切换到登录表单
                             setTimeout(() => {
                                 showLoginForm();
                             }, 2000);
                         } else {
-                            showToast(data.message || '注册失败，请重试', 'error');
+                            showToast(data.msg || '注册失败，请重试', 'error');
                         }
                     } catch (error) {
                         console.error('注册请求失败:', error);
@@ -485,11 +495,11 @@
 
                 // 忘记密码逻辑
                 if (buttonText === '发送重置链接') {
-                    const email = document.getElementById('forgot-email').value;
+                    const userEmail = document.getElementById('forgot-email').value;
 
                     // 表单验证
-                    if (!email) {
-                        showToast('请输入您的邮箱地址', 'error');
+                    if (!userEmail.match(/^\w+@\w+\.\w+$/i||!userEmail)) {
+                        showToast('请正确输入您的邮箱地址', 'error');
                         return;
                     }
 
