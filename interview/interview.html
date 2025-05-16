@@ -233,6 +233,9 @@
                     <i class="fa-solid fa-comments text-primary mr-2"></i>智能面试助手
                 </div>
                 <div class="flex items-center space-x-3">
+                    <button id="backToHomeBtn" class="bg-gray-100 hover:bg-gray-200 text-gray-600 font-medium py-2 px-4 rounded-lg shadow transition-all flex items-center">
+                        <i class="fa-solid fa-house mr-2"></i>返回主页
+                    </button>
                     <button id="clearChatBtn" class="bg-gray-100 hover:bg-gray-200 text-gray-600 font-medium py-2 px-4 rounded-lg shadow transition-all flex items-center">
                         <i class="fa-solid fa-trash-can mr-2"></i>清空记录
                     </button>
@@ -291,6 +294,7 @@
 
     let ws;
     let currentBotDiv = null;
+    let currentUserMessage = null; // 添加变量存储当前用户消息
     const chatBody = document.getElementById('chatBody');
     const chatInput = document.getElementById('chatInput');
     const sendBtn = document.getElementById('sendBtn');
@@ -299,6 +303,7 @@
     const mainContainer = document.getElementById('mainContainer');
     const startBtn = document.getElementById('startBtn');
     const clearChatBtn = document.getElementById('clearChatBtn');
+    const backToHomeBtn = document.getElementById('backToHomeBtn');
 
     // 模拟题库
     const questionBank = [
@@ -353,6 +358,17 @@
                 currentBotDiv.querySelector('.bot-message').textContent += msg.content + ' ';
             });
             if (response.payload.choices.status === 2) {
+                // AI回答完成后，更新右侧内容
+                if (currentUserMessage) {
+                    const card = document.createElement('div');
+                    card.className = 'qa-card bg-white rounded-xl shadow-sm hover:shadow-md transition-all p-6 hover-scale mb-6';
+                    card.innerHTML = `
+                        <div class="question font-bold text-lg text-dark mb-3">用户问题：${currentUserMessage}</div>
+                        <div class="answer text-neutral">AI回答：${currentBotDiv.querySelector('.bot-message').textContent.trim()}</div>
+                    `;
+                    qaList.appendChild(card);
+                    currentUserMessage = null; // 重置当前用户消息
+                }
                 currentBotDiv = null;
             }
             chatBody.scrollTop = chatBody.scrollHeight;
@@ -379,6 +395,9 @@
         const text = chatInput.value.trim();
         if (!text || ws.readyState !== WebSocket.OPEN) return;
 
+        // 保存当前用户消息
+        currentUserMessage = text;
+
         // 显示用户消息
         const userDiv = document.createElement('div');
         userDiv.className = 'flex items-start justify-end mb-6 animate-fade-in';
@@ -395,9 +414,6 @@
             `;
         chatBody.appendChild(userDiv);
         chatBody.scrollTop = chatBody.scrollHeight;
-
-        // 联动题目区
-        showRelatedQuestions(text);
 
         // 构造消息体
         const message = {
@@ -428,30 +444,42 @@
         chatInput.value = '';
     }
 
-    // 联动题目区：根据输入内容匹配题库
-    function showRelatedQuestions(text) {
+    // 联动题目区：展示所有历史对话
+    function showRelatedQuestions() {
         qaList.innerHTML = '';
-        let found = false;
-        questionBank.forEach(q => {
-            if (q.keywords.some(k => text.includes(k))) {
-                found = true;
-                const card = document.createElement('div');
-                card.className = 'qa-card bg-white rounded-xl shadow-sm hover:shadow-md transition-all p-6 hover-scale';
-                card.innerHTML = `
-                        <div class="question font-bold text-lg text-dark mb-3">${q.question}</div>
-                        <div class="answer text-neutral">${q.answer}</div>
-                    `;
-                qaList.appendChild(card);
-            }
-        });
-        if (!found) {
-            // 没有匹配到，展示默认提示
+
+        // 获取所有用户消息和AI回复
+        const userMessages = chatBody.querySelectorAll('.flex.items-start.justify-end');
+        const botMessages = chatBody.querySelectorAll('.flex.items-start:not(.justify-end)');
+
+        // 过滤掉欢迎消息和系统提示
+        const filteredBotMessages = Array.from(botMessages).filter(msg =>
+            !msg.querySelector('.welcome-message') &&
+            !msg.querySelector('.text-green-500')
+        );
+
+        // 展示所有历史对话
+        for (let i = 0; i < userMessages.length; i++) {
+            const userMessage = userMessages[i].querySelector('.bg-primary\\/10').textContent.trim();
+            const botMessage = filteredBotMessages[i]?.querySelector('.bot-message')?.textContent.trim() || '';
+
+            const card = document.createElement('div');
+            card.className = 'qa-card bg-white rounded-xl shadow-sm hover:shadow-md transition-all p-6 hover-scale mb-6';
+            card.innerHTML = `
+                <div class="question font-bold text-lg text-dark mb-3">用户问题：${userMessage}</div>
+                <div class="answer text-neutral">AI回答：${botMessage}</div>
+            `;
+            qaList.appendChild(card);
+        }
+
+        // 如果没有对话内容，显示提示信息
+        if (userMessages.length === 0) {
             const card = document.createElement('div');
             card.className = 'qa-card bg-white rounded-xl shadow-sm hover:shadow-md transition-all p-6 hover-scale';
             card.innerHTML = `
-                    <div class="question font-bold text-lg text-dark mb-3">暂无相关推荐题目</div>
-                    <div class="answer text-neutral">请尝试输入与技术、项目相关的问题。</div>
-                `;
+                <div class="question font-bold text-lg text-dark mb-3">暂无对话内容</div>
+                <div class="answer text-neutral">请开始与AI面试官对话。</div>
+            `;
             qaList.appendChild(card);
         }
     }
@@ -554,6 +582,42 @@
             qaList.appendChild(card);
         });
     }
+
+    // 添加返回主页按钮事件
+    backToHomeBtn.onclick = function() {
+        // 显示确认对话框
+        const confirmDialog = document.createElement('div');
+        confirmDialog.className = 'fixed inset-0 z-50 flex items-center justify-center bg-black/50';
+        confirmDialog.innerHTML = `
+            <div class="bg-white rounded-xl p-6 max-w-sm w-full mx-4 animate-fade-in">
+                <h3 class="text-lg font-bold text-dark mb-4">确认返回</h3>
+                <p class="text-neutral mb-6">确定要返回主页吗？当前对话记录将会被清空。</p>
+                <div class="flex justify-end space-x-3">
+                    <button class="cancel-btn px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600 transition-all">
+                        取消
+                    </button>
+                    <button class="confirm-btn px-4 py-2 rounded-lg bg-primary hover:bg-primary/90 text-white transition-all">
+                        确认返回
+                    </button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(confirmDialog);
+
+        // 绑定取消按钮事件
+        confirmDialog.querySelector('.cancel-btn').onclick = function() {
+            document.body.removeChild(confirmDialog);
+        };
+
+        // 绑定确认按钮事件
+        confirmDialog.querySelector('.confirm-btn').onclick = function() {
+            // 关闭确认对话框
+            document.body.removeChild(confirmDialog);
+
+            // 跳转到 home.html
+            window.location.href = '../home/home.html';
+        };
+    };
 
 </script>
 </body>
