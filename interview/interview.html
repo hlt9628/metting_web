@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI面试助手</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb', // 主色调：蓝色，代表专业和信任
+                        secondary: '#fbbf24', // 辅助色：黄色，代表活力和友好
+                        dark: '#1e293b', // 深色
+                        light: '#f8fafc', // 浅色
+                        neutral: '#64748b', // 中性色
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .transition-custom {
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            .hover-scale {
+                transition: transform 0.2s ease-in-out;
+            }
+            .hover-scale:hover {
+                transform: scale(1.03);
+            }
+            .bg-gradient-primary {
+                background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+            }
+            .bg-gradient-secondary {
+                background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            }
+            .animate-float {
+                animation: float 6s ease-in-out infinite;
+            }
+            @keyframes float {
+                0% { transform: translateY(0px); }
+                50% { transform: translateY(-15px); }
+                100% { transform: translateY(0px); }
+            }
+            .animate-fade-in {
+                animation: fadeIn 0.5s ease-in-out forwards;
+            }
+            @keyframes fadeIn {
+                0% { opacity: 0; transform: translateY(10px); }
+                100% { opacity: 1; transform: translateY(0); }
+            }
+            .animate-pulse-slow {
+                animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            }
+        }
+    </style>
+</head>
+<body class="font-inter bg-light text-dark antialiased">
+<!-- 开始面试遮罩层 -->
+<div id="startOverlay" class="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div class="practice-card-area relative w-full max-w-4xl mx-4 bg-white rounded-2xl shadow-2xl overflow-hidden animate-fade-in">
+        <!-- 背景装饰 -->
+        <div class="absolute -right-10 -top-10 w-64 h-64 bg-primary/10 rounded-full blur-3xl"></div>
+        <div class="absolute -left-20 bottom-0 w-80 h-80 bg-secondary/10 rounded-full blur-3xl"></div>
+
+        <div class="relative p-8 md:p-12">
+            <div class="text-center mb-10">
+                <h1 class="practice-title text-[clamp(1.75rem,3vw,2.5rem)] font-bold text-dark mb-4">面试押题</h1>
+                <p class="practice-desc text-neutral text-lg max-w-2xl mx-auto">基于你的公司、岗位JD、简历信息进行押题</p>
+            </div>
+
+            <div class="practice-list grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                <!-- 面试类型卡片 -->
+                <div class="practice-item bg-white rounded-xl shadow-lg p-6 hover-scale cursor-pointer border border-gray-100">
+                    <div class="flex items-start">
+                        <div class="practice-icon flex-shrink-0 w-12 h-12 rounded-full bg-blue-100 text-primary flex items-center justify-center text-xl mb-2">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <div class="ml-4">
+                            <div class="flex items-center">
+                                <h3 class="practice-name font-bold text-lg">自我介绍</h3>
+                                <span class="practice-tag ml-2 bg-blue-100 text-primary text-xs px-2 py-1 rounded-full">大厂</span>
+                            </div>
+                            <p class="practice-desc2 text-sm text-neutral mt-2">帮你构思有竞争力的自我介绍</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="practice-item bg-white rounded-xl shadow-lg p-6 hover-scale cursor-pointer border border-gray-100">
+                    <div class="flex items-start">
+                        <div class="practice-icon flex-shrink-0 w-12 h-12 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-xl mb-2">
+                            <i class="fa-solid fa-file"></i>
+                        </div>
+                        <div class="ml-4">
+                            <div class="flex items-center">
+                                <h3 class="practice-name font-bold text-lg">项目介绍</h3>
+                            </div>
+                            <p class="practice-desc2 text-sm text-neutral mt-2">训练有亮点的项目介绍及追问应对</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="practice-item bg-white rounded-xl shadow-lg p-6 hover-scale cursor-pointer border border-gray-100">
+                    <div class="flex items-start">
+                        <div class="practice-icon flex-shrink-0 w-12 h-12 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center text-xl mb-2">
+                            <i class="fa-solid fa-money-bill-wave"></i>
+                        </div>
+                        <div class="ml-4">
+                            <div class="flex items-center">
+                                <h3 class="practice-name font-bold text-lg">薪资谈判</h3>
+                                <span class="practice-tag ml-2 bg-orange-100 text-orange-600 text-xs px-2 py-1 rounded-full">外企</span>
+                            </div>
+                            <p class="practice-desc2 text-sm text-neutral mt-2">锻炼谈薪技巧，助你拿取目标薪资</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="practice-item bg-white rounded-xl shadow-lg p-6 hover-scale cursor-pointer border border-gray-100">
+                    <div class="flex items-start">
+                        <div class="practice-icon flex-shrink-0 w-12 h-12 rounded-full bg-blue-100 text-primary flex items-center justify-center text-xl mb-2">
+                            <i class="fa-solid fa-image"></i>
+                        </div>
+                        <div class="ml-4">
+                            <div class="flex items-center">
+                                <h3 class="practice-name font-bold text-lg">情景题</h3>
+                                <span class="practice-tag ml-2 bg-blue-100 text-primary text-xs px-2 py-1 rounded-full">大厂</span>
+                                <span class="practice-tag ml-2 bg-blue-100 text-primary text-xs px-2 py-1 rounded-full">国央企</span>
+                            </div>
+                            <p class="practice-desc2 text-sm text-neutral mt-2">深入讲解，助你学会情景题面试技巧</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="practice-item bg-white rounded-xl shadow-lg p-6 hover-scale cursor-pointer border border-gray-100">
+                    <div class="flex items-start">
+                        <div class="practice-icon flex-shrink-0 w-12 h-12 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-xl mb-2">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <div class="ml-4">
+                            <div class="flex items-center">
+                                <h3 class="practice-name font-bold text-lg">综合分析</h3>
+                                <span class="practice-tag ml-2 bg-purple-100 text-purple-600 text-xs px-2 py-1 rounded-full">国央企</span>
+                                <span class="practice-tag ml-2 bg-purple-100 text-purple-600 text-xs px-2 py-1 rounded-full">银行</span>
+                            </div>
+                            <p class="practice-desc2 text-sm text-neutral mt-2">熟练此类特殊题型，学会综合分析思路</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="practice-item bg-white rounded-xl shadow-lg p-6 hover-scale cursor-pointer border border-gray-100">
+                    <div class="flex items-start">
+                        <div class="practice-icon flex-shrink-0 w-12 h-12 rounded-full bg-teal-100 text-teal-600 flex items-center justify-center text-xl mb-2">
+                            <i class="fa-solid fa-microphone"></i>
+                        </div>
+                        <div class="ml-4">
+                            <div class="flex items-center">
+                                <h3 class="practice-name font-bold text-lg">即兴演讲</h3>
+                                <span class="practice-tag ml-2 bg-teal-100 text-teal-600 text-xs px-2 py-1 rounded-full">国央企</span>
+                                <span class="practice-tag ml-2 bg-teal-100 text-teal-600 text-xs px-2 py-1 rounded-full">银行</span>
+                            </div>
+                            <p class="practice-desc2 text-sm text-neutral mt-2">深度锻炼表达能力，轻松应对此类考题</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="practice-item bg-white rounded-xl shadow-lg p-6 hover-scale cursor-pointer border border-gray-100">
+                    <div class="flex items-start">
+                        <div class="practice-icon flex-shrink-0 w-12 h-12 rounded-full bg-blue-100 text-primary flex items-center justify-center text-xl mb-2">
+                            <i class="fa-solid fa-briefcase"></i>
+                        </div>
+                        <div class="ml-4">
+                            <div class="flex items-center">
+                                <h3 class="practice-name font-bold text-lg">个人信息题</h3>
+                                <span class="practice-tag ml-2 bg-blue-100 text-primary text-xs px-2 py-1 rounded-full">国央企</span>
+                            </div>
+                            <p class="practice-desc2 text-sm text-neutral mt-2">教你用面试思维应对对个人信息题</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="practice-item bg-white rounded-xl shadow-lg p-6 flex items-center justify-center border border-gray-100 opacity-70">
+                    <div class="text-center">
+                        <h3 class="practice-name font-bold text-lg text-neutral">更多功能敬请期待</h3>
+                    </div>
+                </div>
+            </div>
+
+            <button class="start-btn-center bg-gradient-secondary text-dark font-bold py-4 px-12 rounded-full text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-yellow-300" id="startBtn">
+                开始面试
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="container hidden" id="mainContainer">
+    <!-- 左侧导航栏 -->
+    <div class="sidebar bg-dark text-white w-16 md:w-20 flex flex-col items-center py-8 fixed h-full z-20 transition-all duration-300">
+        <div class="avatar w-10 h-10 md:w-12 md:h-12 rounded-full bg-white mb-10 flex items-center justify-center shadow-lg">
+            <i class="fa-solid fa-robot text-primary"></i>
+        </div>
+
+        <div class="menu flex flex-col items-center gap-6 w-full">
+            <div class="menu-item w-10 h-10 md:w-12 md:h-12 rounded-lg bg-primary/20 flex items-center justify-center cursor-pointer hover:bg-primary/30 transition-all">
+                <i class="fa-solid fa-home text-lg"></i>
+            </div>
+            <div class="menu-item w-10 h-10 md:w-12 md:h-12 rounded-lg hover:bg-primary/20 flex items-center justify-center cursor-pointer transition-all">
+                <i class="fa-solid fa-calendar-day text-lg"></i>
+            </div>
+            <div class="menu-item w-10 h-10 md:w-12 md:h-12 rounded-lg hover:bg-primary/20 flex items-center justify-center cursor-pointer transition-all">
+                <i class="fa-solid fa-history text-lg"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- 右侧主内容区 -->
+    <div class="main-content ml-16 md:ml-20 flex flex-col h-screen">
+        <div class="main-header bg-white border-b border-gray-200 px-6 py-4 shadow-sm sticky top-0 z-10">
+            <div class="flex justify-between items-center">
+                <div class="title text-xl md:text-2xl font-bold text-dark">
+                    <i class="fa-solid fa-comments text-primary mr-2"></i>智能面试助手
+                </div>
+                <div class="flex items-center space-x-3">
+                    <button id="clearChatBtn" class="bg-gray-100 hover:bg-gray-200 text-gray-600 font-medium py-2 px-4 rounded-lg shadow transition-all flex items-center">
+                        <i class="fa-solid fa-trash-can mr-2"></i>清空记录
+                    </button>
+                    <button class="download-btn bg-primary hover:bg-primary/90 text-white font-medium py-2 px-4 rounded-lg shadow transition-all flex items-center">
+                        <i class="fa-solid fa-download mr-2"></i>下载
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-body flex flex-col md:flex-row flex-1 overflow-hidden">
+            <!-- 聊天区 -->
+            <div class="chat-section w-full md:w-2/5 lg:w-1/3 bg-white border-r border-gray-200 flex flex-col h-full">
+                <div class="chat-body flex-1 p-4 overflow-y-auto" id="chatBody">
+                    <div class="welcome-message bg-blue-50 rounded-xl p-4 mb-6 animate-fade-in">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                                <i class="fa-solid fa-robot text-primary"></i>
+                            </div>
+                            <div class="ml-3">
+                                <h4 class="font-medium text-dark">AI面试官</h4>
+                                <p class="text-neutral mt-1">你好！我是你的AI面试助手。请告诉我你正在准备的面试类型，或者直接开始提问，我会尽力帮助你。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-footer p-4 border-t border-gray-200 bg-white">
+                    <div class="flex items-center">
+                        <input type="text" id="chatInput" placeholder="请输入您的问题..." class="flex-1 px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all">
+                        <button id="sendBtn" class="ml-3 bg-primary hover:bg-primary/90 text-white w-12 h-12 rounded-lg flex items-center justify-center shadow transition-all">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 题目区 -->
+            <div class="qa-section w-full md:w-3/5 lg:w-2/3 bg-gray-50 p-6 overflow-y-auto">
+                <div class="qa-title text-xl font-bold text-dark mb-6">面试题目</div>
+
+                <div class="qa-list space-y-6" id="qaList">
+                    <!-- 动态内容将通过JavaScript插入 -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 用户提供的参数
+    const WS_URL = 'wss://spark-openapi.cn-huabei-1.xf-yun.com/v1/assistants/oirgtx7whg9y_v1';
+    const APP_ID = '3bf2e419';
+    const API_KEY = '0e35ab842bd3a42602b36a462c68f971';
+    const API_SECRET = 'MjEzMzNhZjE4NTNjZTljMjZmYjEyM2Uz';
+
+    let ws;
+    let currentBotDiv = null;
+    const chatBody = document.getElementById('chatBody');
+    const chatInput = document.getElementById('chatInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const qaList = document.getElementById('qaList');
+    const startOverlay = document.getElementById('startOverlay');
+    const mainContainer = document.getElementById('mainContainer');
+    const startBtn = document.getElementById('startBtn');
+    const clearChatBtn = document.getElementById('clearChatBtn');
+
+    // 模拟题库
+    const questionBank = [
+        {
+            keywords: ['线程池', '多线程', '并发'],
+            question: '线程池的原理是什么？',
+            answer: '线程池通过创建一定数量的线程，当有任务提交时从线程池中获取线程执行任务，任务完成后线程归还线程池，避免频繁创建和销毁线程带来的开销。'
+        },
+        {
+            keywords: ['ArrayList', 'LinkedList', '集合'],
+            question: 'ArrayList和LinkedList的底层数据结构分别是什么？',
+            answer: 'ArrayList底层是动态数组，LinkedList底层是双向链表。'
+        },
+        {
+            keywords: ['@Transactional', '事务'],
+            question: '使用@Transactional注解的条件是什么？',
+            answer: '需要在Spring框架中，方法所在类要被Spring管理，方法为public等基本条件。'
+        },
+        {
+            keywords: ['异常', '稳定', '上线'],
+            question: '在项目中使用Spring MVC Controller时，如何处理异常并保证系统稳定上线？',
+            answer: '需结合全局异常处理器、日志记录等方式处理异常，通过测试、监控等手段保障系统稳定上线。'
+        }
+    ];
+
+    function connectWebSocket() {
+        ws = new WebSocket(WS_URL);
+        ws.onopen = function() {
+            console.log('WebSocket已连接');
+        };
+        ws.onmessage = function(event) {
+            const response = JSON.parse(event.data);
+            const messages = response.payload.choices.text;
+            if (!currentBotDiv) {
+                currentBotDiv = document.createElement('div');
+                currentBotDiv.className = 'flex items-start mb-6 animate-fade-in';
+                currentBotDiv.innerHTML = `
+                        <div class="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                            <i class="fa-solid fa-robot text-primary"></i>
+                        </div>
+                        <div class="ml-3 max-w-[85%]">
+                            <h4 class="font-medium text-dark">AI面试官</h4>
+                            <div class="bg-blue-50 mt-1 p-4 rounded-xl text-neutral">
+                                <span class="bot-message"></span>
+                            </div>
+                        </div>
+                    `;
+                chatBody.appendChild(currentBotDiv);
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }
+            messages.forEach(msg => {
+                currentBotDiv.querySelector('.bot-message').textContent += msg.content + ' ';
+            });
+            if (response.payload.choices.status === 2) {
+                currentBotDiv = null;
+            }
+            chatBody.scrollTop = chatBody.scrollHeight;
+        };
+        ws.onerror = function(err) {
+            console.log('WebSocket错误', err);
+        };
+        ws.onclose = function() {
+            console.log('WebSocket已关闭，尝试重连...');
+            setTimeout(connectWebSocket, 1000);
+        };
+    }
+    connectWebSocket();
+
+    sendBtn.onclick = function() {
+        sendMessage();
+    };
+
+    chatInput.onkeydown = function(e) {
+        if (e.key === 'Enter') sendMessage();
+    };
+
+    function sendMessage() {
+        const text = chatInput.value.trim();
+        if (!text || ws.readyState !== WebSocket.OPEN) return;
+
+        // 显示用户消息
+        const userDiv = document.createElement('div');
+        userDiv.className = 'flex items-start justify-end mb-6 animate-fade-in';
+        userDiv.innerHTML = `
+                <div class="mr-3 max-w-[85%]">
+                    <div class="bg-primary/10 p-4 rounded-xl text-dark text-right">
+                        ${text}
+                    </div>
+                    <h4 class="font-medium text-right text-neutral text-sm mt-1">你</h4>
+                </div>
+                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
+                    <i class="fa-solid fa-user text-neutral"></i>
+                </div>
+            `;
+        chatBody.appendChild(userDiv);
+        chatBody.scrollTop = chatBody.scrollHeight;
+
+        // 联动题目区
+        showRelatedQuestions(text);
+
+        // 构造消息体
+        const message = {
+            "header": {
+                "app_id": APP_ID,
+                "uid": "user-001"
+            },
+            "parameter": {
+                "chat": {
+                    "domain": "general",
+                    "temperature": 0.5,
+                    "top_k": 4,
+                    "max_tokens": 1024
+                }
+            },
+            "payload": {
+                "message": {
+                    "text": [
+                        {
+                            "role": "user",
+                            "content": text
+                        }
+                    ]
+                }
+            }
+        };
+        ws.send(JSON.stringify(message));
+        chatInput.value = '';
+    }
+
+    // 联动题目区：根据输入内容匹配题库
+    function showRelatedQuestions(text) {
+        qaList.innerHTML = '';
+        let found = false;
+        questionBank.forEach(q => {
+            if (q.keywords.some(k => text.includes(k))) {
+                found = true;
+                const card = document.createElement('div');
+                card.className = 'qa-card bg-white rounded-xl shadow-sm hover:shadow-md transition-all p-6 hover-scale';
+                card.innerHTML = `
+                        <div class="question font-bold text-lg text-dark mb-3">${q.question}</div>
+                        <div class="answer text-neutral">${q.answer}</div>
+                    `;
+                qaList.appendChild(card);
+            }
+        });
+        if (!found) {
+            // 没有匹配到，展示默认提示
+            const card = document.createElement('div');
+            card.className = 'qa-card bg-white rounded-xl shadow-sm hover:shadow-md transition-all p-6 hover-scale';
+            card.innerHTML = `
+                    <div class="question font-bold text-lg text-dark mb-3">暂无相关推荐题目</div>
+                    <div class="answer text-neutral">请尝试输入与技术、项目相关的问题。</div>
+                `;
+            qaList.appendChild(card);
+        }
+    }
+
+    startBtn.onclick = function() {
+        // 添加按钮点击效果
+        startBtn.classList.add('scale-95');
+        setTimeout(() => {
+            startBtn.classList.remove('scale-95');
+        }, 150);
+
+        // 页面切换动画
+        startOverlay.classList.add('opacity-0', 'pointer-events-none');
+        startOverlay.style.transition = 'opacity 0.5s ease-in-out';
+
+        setTimeout(function() {
+            startOverlay.style.display = 'none';
+            mainContainer.classList.remove('hidden');
+            mainContainer.classList.add('animate-fade-in');
+
+            // 延迟显示提示
+            setTimeout(function() {
+                alert('请先上传简历');
+            }, 800);
+        }, 500);
+    };
+
+    // 添加清空聊天记录功能
+    clearChatBtn.onclick = function() {
+        // 创建确认对话框
+        const confirmDialog = document.createElement('div');
+        confirmDialog.className = 'fixed inset-0 z-50 flex items-center justify-center bg-black/50';
+        confirmDialog.innerHTML = `
+            <div class="bg-white rounded-xl p-6 max-w-sm w-full mx-4 animate-fade-in">
+                <h3 class="text-lg font-bold text-dark mb-4">确认清空</h3>
+                <p class="text-neutral mb-6">确定要清空所有聊天记录吗？此操作不可恢复。</p>
+                <div class="flex justify-end space-x-3">
+                    <button class="cancel-btn px-4 py-2 rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-600 transition-all">
+                        取消
+                    </button>
+                    <button class="confirm-btn px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white transition-all">
+                        确认清空
+                    </button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(confirmDialog);
+
+        // 绑定取消按钮事件
+        confirmDialog.querySelector('.cancel-btn').onclick = function() {
+            document.body.removeChild(confirmDialog);
+        };
+
+        // 绑定确认按钮事件
+        confirmDialog.querySelector('.confirm-btn').onclick = function() {
+            // 保留欢迎消息
+            const welcomeMessage = chatBody.querySelector('.welcome-message');
+            chatBody.innerHTML = '';
+            if (welcomeMessage) {
+                chatBody.appendChild(welcomeMessage);
+            }
+
+            // 清空题目区
+            qaList.innerHTML = '';
+
+            // 关闭确认对话框
+            document.body.removeChild(confirmDialog);
+
+            // 显示清空成功提示
+            const successMessage = document.createElement('div');
+            successMessage.className = 'flex items-start mb-6 animate-fade-in';
+            successMessage.innerHTML = `
+                <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                    <i class="fa-solid fa-check text-green-500"></i>
+                </div>
+                <div class="ml-3 max-w-[85%]">
+                    <h4 class="font-medium text-green-500">系统提示</h4>
+                    <div class="bg-green-50 mt-1 p-4 rounded-xl text-green-600">
+                        聊天记录已清空
+                    </div>
+                </div>
+            `;
+            chatBody.appendChild(successMessage);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        };
+    };
+
+    // 添加动态渲染题目列表的函数
+    function renderQuestionList(questions) {
+        const qaList = document.getElementById('qaList');
+        qaList.innerHTML = ''; // 清空现有内容
+
+        questions.forEach(question => {
+            const card = document.createElement('div');
+            card.className = 'qa-card bg-white rounded-xl shadow-sm hover:shadow-md transition-all p-6 hover-scale';
+            card.innerHTML = `
+                <div class="question font-bold text-lg text-dark mb-3">${question.title}</div>
+                <div class="answer text-neutral">${question.answer}</div>
+            `;
+            qaList.appendChild(card);
+        });
+    }
+
+</script>
+</body>
+</html>

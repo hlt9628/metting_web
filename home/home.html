@@ -74,10 +74,10 @@
             </div>
             <div class="hidden md:flex space-x-6">
                 <a href="#home" class="text-gray-700 hover:text-primary transition-colors duration-200">首页</a>
-                <a href="#features" class="text-gray-700 hover:text-primary transition-colors duration-200">系统功能</a>
-                <a href="#interview" class="text-gray-700 hover:text-primary transition-colors duration-200">开始面试</a>
-                <a href="#reports" class="text-gray-700 hover:text-primary transition-colors duration-200">历史报告</a>
-                <a href="#about" class="text-gray-700 hover:text-primary transition-colors duration-200">关于我们</a>
+                <a href="../interview/learning_line.html" class="text-gray-700 hover:text-primary transition-colors duration-200">个性化路线推荐</a>
+                <a href="../interview/interview.html" class="text-gray-700 hover:text-primary transition-colors duration-200">开始面试</a>
+                <a href="../interview/reporter.html" class="text-gray-700 hover:text-primary transition-colors duration-200">历史报告</a>
+                <a href="question-home.html" class="text-gray-700 hover:text-primary transition-colors duration-200">刷题</a>
             </div>
             <button onclick="backlogin()" id="login-btn" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg">
                 登录
@@ -109,7 +109,8 @@
                     利用先进的AI技术，提供多模态面试评估，帮助你发现问题，改进表现，提升自信。
                 </p>
                 <div class="flex flex-wrap gap-4">
-                    <button id="start-interview-btn" class="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg btn-pulse">
+                    <button id="start-interview-btn" class="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg btn-pulse"
+                    onclick="goTometting()">
                         <i class="fa-solid fa-play-circle mr-2"></i>开始模拟面试
                     </button>
                     <button class="bg-white hover:bg-gray-50 text-primary border border-primary px-6 py-3 rounded-lg transition-all duration-200 shadow-sm hover:shadow">
@@ -246,149 +247,9 @@
                                     <option value="design">UI/UX设计师</option>
                                 </select>
                             </div>
-
-                            <div>
-                                <label class="block text-gray-700 mb-2 text-sm">问题数量</label>
-                                <input type="range" id="question-count" min="3" max="10" value="5" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
-                                <div class="flex justify-between text-xs text-gray-500 mt-1">
-                                    <span>3题</span>
-                                    <span id="question-count-value">5题</span>
-                                    <span>10题</span>
-                                </div>
-                            </div>
-
                             <button id="start-btn" class="w-full bg-primary hover:bg-primary/90 text-white py-3 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center">
                                 <i class="fa-solid fa-play mr-2"></i>开始面试
                             </button>
-                        </div>
-                    </div>
-
-                    <!-- 面试区域 -->
-                    <div id="interview-area" class="p-6 border-b md:border-b-0 md:border-r border-gray-100 hidden">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="text-lg font-semibold">面试进行中</h3>
-                            <div class="text-sm text-gray-500">
-                                <span id="current-question">问题 1/5</span>
-                            </div>
-                        </div>
-
-                        <div class="bg-light rounded-lg p-4 mb-6">
-                            <h4 class="font-medium mb-2">当前问题:</h4>
-                            <p id="question-text" class="text-gray-700">请简要介绍一下你自己，包括你的教育背景、专业技能和相关项目经验。</p>
-                        </div>
-
-                        <div class="relative">
-                            <div id="timer" class="absolute -top-10 right-0 bg-primary text-white text-xs px-3 py-1 rounded-full">
-                                剩余时间: <span id="time-left">60s</span>
-                            </div>
-
-                            <div id="video-container" class="w-full aspect-video bg-gray-100 rounded-lg mb-4 flex items-center justify-center">
-                                <img id="preview-image" src="https://picsum.photos/id/1005/600/400" alt="面试预览" class="w-full h-full object-cover rounded-lg">
-                                <video id="interview-video" class="w-full h-full object-cover rounded-lg hidden" autoplay muted></video>
-                            </div>
-
-                            <div class="flex justify-center space-x-4">
-                                <button id="pause-btn" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg transition-all duration-200">
-                                    <i class="fa-solid fa-pause"></i>
-                                </button>
-                                <button id="stop-btn" class="bg-danger hover:bg-danger/90 text-white px-4 py-2 rounded-lg transition-all duration-200">
-                                    <i class="fa-solid fa-stop"></i>
-                                </button>
-                                <button id="next-btn" class="bg-secondary hover:bg-secondary/90 text-white px-4 py-2 rounded-lg transition-all duration-200">
-                                    下一题 <i class="fa-solid fa-arrow-right ml-1"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 实时评估 -->
-                    <div id="evaluation-area" class="p-6 hidden">
-                        <h3 class="text-lg font-semibold mb-4">实时评估</h3>
-
-                        <div class="space-y-6">
-                            <div>
-                                <h4 class="text-sm font-medium text-gray-500 mb-2">总体评分</h4>
-                                <div class="bg-light rounded-lg p-4">
-                                    <div class="flex justify-between items-center mb-2">
-                                        <span class="text-sm">当前得分</span>
-                                        <span id="current-score" class="text-2xl font-bold text-primary">78</span>
-                                    </div>
-                                    <div class="w-full bg-gray-200 rounded-full h-2.5">
-                                        <div id="score-progress" class="bg-primary h-2.5 rounded-full" style="width: 78%"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div>
-                                <h4 class="text-sm font-medium text-gray-500 mb-2">维度评分</h4>
-                                <div class="grid grid-cols-2 gap-3">
-                                    <div class="bg-light rounded-lg p-3">
-                                        <div class="flex justify-between items-center mb-1">
-                                            <span class="text-xs">内容完整性</span>
-                                            <span id="content-score" class="text-xs font-semibold">85%</span>
-                                        </div>
-                                        <div class="w-full bg-gray-200 rounded-full h-1.5">
-                                            <div class="bg-primary h-1.5 rounded-full" style="width: 85%"></div>
-                                        </div>
-                                    </div>
-
-                                    <div class="bg-light rounded-lg p-3">
-                                        <div class="flex justify-between items-center mb-1">
-                                            <span class="text-xs">逻辑清晰度</span>
-                                            <span id="logic-score" class="text-xs font-semibold">72%</span>
-                                        </div>
-                                        <div class="w-full bg-gray-200 rounded-full h-1.5">
-                                            <div class="bg-primary h-1.5 rounded-full" style="width: 72%"></div>
-                                        </div>
-                                    </div>
-
-                                    <div class="bg-light rounded-lg p-3">
-                                        <div class="flex justify-between items-center mb-1">
-                                            <span class="text-xs">表达流畅度</span>
-                                            <span id="fluency-score" class="text-xs font-semibold">80%</span>
-                                        </div>
-                                        <div class="w-full bg-gray-200 rounded-full h-1.5">
-                                            <div class="bg-primary h-1.5 rounded-full" style="width: 80%"></div>
-                                        </div>
-                                    </div>
-
-                                    <div class="bg-light rounded-lg p-3">
-                                        <div class="flex justify-between items-center mb-1">
-                                            <span class="text-xs">肢体语言</span>
-                                            <span id="body-score" class="text-xs font-semibold">68%</span>
-                                        </div>
-                                        <div class="w-full bg-gray-200 rounded-full h-1.5">
-                                            <div class="bg-warning h-1.5 rounded-full" style="width: 68%"></div>
-                                        </div>
-                                    </div>
-
-                                    <div class="bg-light rounded-lg p-3">
-                                        <div class="flex justify-between items-center mb-1">
-                                            <span class="text-xs">语音语调</span>
-                                            <span id="intonation-score" class="text-xs font-semibold">75%</span>
-                                        </div>
-                                        <div class="w-full bg-gray-200 rounded-full h-1.5">
-                                            <div class="bg-primary h-1.5 rounded-full" style="width: 75%"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div>
-                                <h4 class="text-sm font-medium text-gray-500 mb-2">实时建议</h4>
-                                <div class="bg-light rounded-lg p-4 text-sm text-gray-700">
-                                    <ul id="suggestions" class="space-y-2">
-                                        <li class="flex items-start">
-                                            <i class="fa-solid fa-circle-exclamation text-warning mt-1 mr-2"></i>
-                                            <span>您的语速稍快，建议适当放慢语速，确保表达清晰</span>
-                                        </li>
-                                        <li class="flex items-start">
-                                            <i class="fa-solid fa-circle-exclamation text-warning mt-1 mr-2"></i>
-                                            <span>可以增加一些眼神交流，提高与面试官的互动感</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -571,6 +432,15 @@
         </div>
     </section>
     <script>
+        window.onload=function(){
+
+            if (localStorage.hasOwnProperty("token") === false){
+                window.location.href = './../login/login.html';
+            }
+        }
+        function goTometting(){
+            location.href="./../interview/interview.html";
+        }
         function backlogin(){
             localStorage.removeItem('token')
             localStorage.removeItem('userEmail')

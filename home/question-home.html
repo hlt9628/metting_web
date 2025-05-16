@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>面试题库 - 提升你的面试技能</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF',
+                        secondary: '#7B61FF',
+                        dark: '#1D2129',
+                        neutral: '#4E5969',
+                        light: '#F2F3F5',
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.5s ease-out',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        #sidebar {
+            min-width: 4rem;
+            max-width: 14rem;
+        }
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .hover-scale {
+                @apply transition-transform duration-300 hover:scale-[1.02];
+            }
+            .card-shadow {
+                @apply shadow-md hover:shadow-xl transition-shadow duration-300;
+            }
+            .text-balance {
+                text-wrap: balance;
+            }
+        }
+    </style>
+</head>
+<body class="font-inter bg-gray-50 text-dark">
+<!-- 导航栏 -->
+<!-- 侧边栏 -->
+<aside id="sidebar" class="fixed top-0 left-0 h-full z-40 bg-white shadow-lg transition-all duration-300 w-56">
+    <div class="flex flex-col h-full">
+        <!-- Logo和收起按钮 -->
+        <div class="flex items-center justify-between px-4 py-4 border-b border-gray-100">
+            <a href="#" class="flex items-center">
+                <div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center mr-3">
+                    <i class="fa-solid fa-graduation-cap text-white text-xl"></i>
+                </div>
+                <span class="text-xl font-bold text-dark sidebar-title">面试题库</span>
+            </a>
+            <button id="toggleSidebar" class="ml-2 p-2 rounded hover:bg-gray-100 transition">
+                <i class="fa-solid fa-angle-left text-xl"></i>
+            </button>
+        </div>
+        <!-- 菜单 -->
+        <nav class="flex-1 flex flex-col mt-6 space-y-2">
+            <a href="#" class="flex items-center px-6 py-3 text-neutral hover:text-primary hover:bg-primary/10 rounded transition">
+                <i class="fa-solid fa-list text-lg mr-4"></i>
+                <span class="sidebar-text">题库</span>
+            </a>
+            <a href="#" class="flex items-center px-6 py-3 text-neutral hover:text-primary hover:bg-primary/10 rounded transition">
+                <i class="fa-solid fa-road text-lg mr-4"></i>
+                <span class="sidebar-text">学习路径</span>
+            </a>
+            <a href="#" class="flex items-center px-6 py-3 text-neutral hover:text-primary hover:bg-primary/10 rounded transition">
+                <i class="fa-solid fa-ranking-star text-lg mr-4"></i>
+                <span class="sidebar-text">排行榜</span>
+            </a>
+            <a href="#" class="flex items-center px-6 py-3 text-neutral hover:text-primary hover:bg-primary/10 rounded transition">
+                <i class="fa-solid fa-users text-lg mr-4"></i>
+                <span class="sidebar-text">社区</span>
+            </a>
+        </nav>
+    </div>
+</aside>
+
+<!-- 英雄区域 -->
+<div id="mainContent" class="transition-all duration-300 ml-56">
+    <!-- 这里放原来的所有内容（section、footer等） -->
+
+    <section class="pt-28 pb-16 md:pt-40 md:pb-24 bg-gradient-to-br from-primary/5 to-secondary/5">
+        <div class="container mx-auto px-4">
+            <div class="max-w-3xl mx-auto text-center">
+                <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold text-dark mb-6 leading-tight animate-fade-in">
+                    准备面试，<span class="text-primary">从这里开始</span>
+                </h1>
+                <p class="text-neutral text-lg md:text-xl mb-8 max-w-2xl mx-auto animate-slide-up" style="animation-delay: 0.2s">
+                    我们收集了最常见的面试问题，帮助你提升技能，增加面试通过率
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4 animate-slide-up" style="animation-delay: 0.4s">
+                    <button class="px-8 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-1">
+                        开始练习
+                    </button>
+                    <button class="px-8 py-3 bg-white text-primary border border-primary rounded-lg hover:bg-primary/5 transition-all duration-200 shadow-sm hover:shadow-md hover:-translate-y-1">
+                        查看学习路径
+                    </button>
+                </div>
+                <div class="mt-10 flex flex-wrap justify-center gap-6 animate-slide-up" style="animation-delay: 0.6s">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                            <i class="fa-solid fa-question text-primary"></i>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-dark">10,000+</div>
+                            <div class="text-sm text-neutral">面试题目</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-3">
+                            <i class="fa-solid fa-users text-green-600"></i>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-dark">50,000+</div>
+                            <div class="text-sm text-neutral">活跃用户</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center mr-3">
+                            <i class="fa-solid fa-building text-purple-600"></i>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold text-dark">500+</div>
+                            <div class="text-sm text-neutral">合作企业</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 热门面试题目区域 -->
+    <section id="hot-questions" class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-8">
+                <div>
+                    <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold text-dark mb-4">热门面试题目</h2>
+                    <p class="text-gray-600 max-w-2xl">
+                        这些是当前最受关注的面试问题，点击开始练习
+                    </p>
+                </div>
+
+                <div class="mt-4 md:mt-0">
+                    <select id="question-category" class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary">
+                        <option>全部岗位</option>
+                        <option>软件开发工程师</option>
+                        <option>数据分析师</option>
+                        <option>产品经理</option>
+                        <option>UI/UX设计师</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- 题目卡片1 -->
+                <div class="bg-light rounded-xl shadow-sm hover:shadow-md transition-all overflow-hidden hover-scale">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center mr-3">
+                                <i class="fa-solid fa-code text-primary"></i>
+                            </div>
+                            <span class="text-sm font-medium text-primary">软件开发</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-dark mb-3">
+                            请解释一下线程池的工作原理和适用场景
+                        </h3>
+                        <p class="text-neutral mb-4 line-clamp-2">
+                            线程池是一种多线程处理形式，处理过程中将任务添加到队列，然后在创建线程后自动启动这些任务...
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                    <span class="text-sm text-neutral mr-4">
+                                        <i class="fa-solid fa-eye mr-1"></i> 2.4k
+                                    </span>
+                                <span class="text-sm text-neutral">
+                                        <i class="fa-solid fa-star mr-1"></i> 4.8
+                                    </span>
+                            </div>
+                            <button class="text-primary hover:text-primary/80" onclick="openQuestionModal(1, '软件开发', '中等难度', '请解释一下线程池的工作原理和适用场景', questionData[0].description, 'explanation1')">
+                                练习 <i class="fa-solid fa-arrow-right ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 题目卡片2 -->
+                <div class="bg-light rounded-xl shadow-sm hover:shadow-md transition-all overflow-hidden hover-scale">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mr-3">
+                                <i class="fa-solid fa-database text-green-600"></i>
+                            </div>
+                            <span class="text-sm font-medium text-green-600">数据分析</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-dark mb-3">
+                            如何优化SQL查询性能？请列举至少5种方法
+                        </h3>
+                        <p class="text-neutral mb-4 line-clamp-2">
+                            SQL查询性能优化是数据库管理中的重要环节，优化查询可以显著提高数据库的响应速度和吞吐量...
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                    <span class="text-sm text-neutral mr-4">
+                                        <i class="fa-solid fa-eye mr-1"></i> 1.8k
+                                    </span>
+                                <span class="text-sm text-neutral">
+                                        <i class="fa-solid fa-star mr-1"></i> 4.7
+                                    </span>
+                            </div>
+                            <button class="text-primary hover:text-primary/80" onclick="openQuestionModal(2, '数据分析', '中等难度', '如何优化SQL查询性能？请列举至少5种方法', questionData[1].description, 'explanation2')">
+                                练习 <i class="fa-solid fa-arrow-right ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 题目卡片3 -->
+                <div class="bg-light rounded-xl shadow-sm hover:shadow-md transition-all overflow-hidden hover-scale">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center mr-3">
+                                <i class="fa-solid fa-mobile text-purple-600"></i>
+                            </div>
+                            <span class="text-sm font-medium text-purple-600">移动开发</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-dark mb-3">
+                            Android中的内存泄漏如何检测和避免？
+                        </h3>
+                        <p class="text-neutral mb-4 line-clamp-2">
+                            内存泄漏是Android开发中常见的问题，它会导致应用占用的内存不断增加，最终可能导致应用崩溃...
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                    <span class="text-sm text-neutral mr-4">
+                                        <i class="fa-solid fa-eye mr-1"></i> 1.5k
+                                    </span>
+                                <span class="text-sm text-neutral">
+                                        <i class="fa-solid fa-star mr-1"></i> 4.6
+                                    </span>
+                            </div>
+                            <button class="text-primary hover:text-primary/80" onclick="openQuestionModal(3, '移动开发', '中等难度', 'Android中的内存泄漏如何检测和避免？', questionData[2].description, 'explanation3')">
+                                练习 <i class="fa-solid fa-arrow-right ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 题目卡片4 -->
+                <div class="bg-light rounded-xl shadow-sm hover:shadow-md transition-all overflow-hidden hover-scale">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center mr-3">
+                                <i class="fa-solid fa-cogs text-orange-600"></i>
+                            </div>
+                            <span class="text-sm font-medium text-orange-600">系统设计</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-dark mb-3">
+                            如何设计一个高并发的秒杀系统？
+                        </h3>
+                        <p class="text-neutral mb-4 line-clamp-2">
+                            秒杀系统是典型的读多写少高并发场景，需要考虑如何处理瞬时高并发、防止超卖、保证数据一致性等问题...
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                    <span class="text-sm text-neutral mr-4">
+                                        <i class="fa-solid fa-eye mr-1"></i> 2.1k
+                                    </span>
+                                <span class="text-sm text-neutral">
+                                        <i class="fa-solid fa-star mr-1"></i> 4.9
+                                    </span>
+                            </div>
+                            <button class="text-primary hover:text-primary/80" onclick="openQuestionModal(4, '系统设计', '高难度', '如何设计一个高并发的秒杀系统？', questionData[3].description, 'explanation4')">
+                                练习 <i class="fa-solid fa-arrow-right ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 题目卡片5 -->
+                <div class="bg-light rounded-xl shadow-sm hover:shadow-md transition-all overflow-hidden hover-scale">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center mr-3">
+                                <i class="fa-solid fa-paint-brush text-red-600"></i>
+                            </div>
+                            <span class="text-sm font-medium text-red-600">UI/UX设计</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-dark mb-3">
+                            请解释一下设计中的用户体验(UX)和用户界面(UI)的区别
+                        </h3>
+                        <p class="text-neutral mb-4 line-clamp-2">
+                            在设计领域，UI和UX是两个经常被混淆的概念。虽然它们密切相关，但代表了设计过程中的不同方面...
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                    <span class="text-sm text-neutral mr-4">
+                                        <i class="fa-solid fa-eye mr-1"></i> 1.7k
+                                    </span>
+                                <span class="text-sm text-neutral">
+                                        <i class="fa-solid fa-star mr-1"></i> 4.7
+                                    </span>
+                            </div>
+                            <button class="text-primary hover:text-primary/80" onclick="openQuestionModal(5, 'UI/UX设计', '中等难度', '请解释一下设计中的用户体验(UX)和用户界面(UI)的区别', questionData[4].description, 'explanation5')">
+                                练习 <i class="fa-solid fa-arrow-right ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 题目卡片6 -->
+                <div class="bg-light rounded-xl shadow-sm hover:shadow-md transition-all overflow-hidden hover-scale">
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center mr-3">
+                                <i class="fa-solid fa-line-chart text-teal-600"></i>
+                            </div>
+                            <span class="text-sm font-medium text-teal-600">数据结构</span>
+                        </div>
+                        <h3 class="font-bold text-lg text-dark mb-3">
+                            比较数组和链表的优缺点
+                        </h3>
+                        <p class="text-neutral mb-4 line-clamp-2">
+                            数组和链表是两种基本的数据结构，它们在内存分配、访问方式、插入删除操作等方面有很大差异...
+                        </p>
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center">
+                                    <span class="text-sm text-neutral mr-4">
+                                        <i class="fa-solid fa-eye mr-1"></i> 2.3k
+                                    </span>
+                                <span class="text-sm text-neutral">
+                                        <i class="fa-solid fa-star mr-1"></i> 4.8
+                                    </span>
+                            </div>
+                            <button class="text-primary hover:text-primary/80" onclick="openQuestionModal(6, '数据结构', '初级难度', '比较数组和链表的优缺点', questionData[5].description, 'explanation6')">
+                                练习 <i class="fa-solid fa-arrow-right ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-10">
+                <button class="px-6 py-3 bg-white text-primary border border-primary font-medium rounded-lg shadow hover:shadow-md transition-all hover:-translate-y-1">
+                    查看更多题目
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 学习路径区域 -->
+    <section class="py-16 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold text-dark mb-4">热门学习路径</h2>
+                <p class="text-neutral max-w-2xl mx-auto">
+                    选择适合你的学习路径，系统提升面试技能
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- 路径卡片1 -->
+                <div class="bg-white rounded-xl overflow-hidden card-shadow">
+                    <div class="relative h-48">
+                        <img src="https://picsum.photos/seed/backend/600/400" alt="后端开发学习路径" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 right-4">
+                                <span class="px-3 py-1 bg-primary/90 text-white text-xs font-medium rounded-full">
+                                    后端开发
+                                </span>
+                            <h3 class="text-xl font-bold text-white mt-2">Java后端开发面试精讲</h3>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="flex -space-x-2">
+                                <img src="https://picsum.photos/seed/user1/100" alt="用户头像" class="w-8 h-8 rounded-full border-2 border-white">
+                                <img src="https://picsum.photos/seed/user2/100" alt="用户头像" class="w-8 h-8 rounded-full border-2 border-white">
+                                <img src="https://picsum.photos/seed/user3/100" alt="用户头像" class="w-8 h-8 rounded-full border-2 border-white">
+                            </div>
+                            <span class="text-sm text-neutral ml-2">已有 1,200+ 人学习</span>
+                        </div>
+                        <p class="text-neutral mb-6">
+                            从Java基础到高级特性，再到分布式系统设计，全面覆盖后端开发面试知识点
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="text-sm text-neutral">难度</div>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-16 bg-gray-200 rounded-full h-2">
+                                        <div class="bg-primary h-2 rounded-full" style="width: 75%"></div>
+                                    </div>
+                                    <span class="text-sm text-neutral ml-2">中等偏难</span>
+                                </div>
+                            </div>
+                            <button class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+                                开始学习
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 路径卡片2 -->
+                <div class="bg-white rounded-xl overflow-hidden card-shadow">
+                    <div class="relative h-48">
+                        <img src="https://picsum.photos/seed/frontend/600/400" alt="前端开发学习路径" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 right-4">
+                                <span class="px-3 py-1 bg-purple-600/90 text-white text-xs font-medium rounded-full">
+                                    前端开发
+                                </span>
+                            <h3 class="text-xl font-bold text-white mt-2">前端开发面试通关秘籍</h3>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="flex -space-x-2">
+                                <img src="https://picsum.photos/seed/user4/100" alt="用户头像" class="w-8 h-8 rounded-full border-2 border-white">
+                                <img src="https://picsum.photos/seed/user5/100" alt="用户头像" class="w-8 h-8 rounded-full border-2 border-white">
+                                <img src="https://picsum.photos/seed/user6/100" alt="用户头像" class="w-8 h-8 rounded-full border-2 border-white">
+                            </div>
+                            <span class="text-sm text-neutral ml-2">已有 980+ 人学习</span>
+                        </div>
+                        <p class="text-neutral mb-6">
+                            深入理解HTML、CSS、JavaScript，掌握React、Vue等主流框架，提升前端面试竞争力
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="text-sm text-neutral">难度</div>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-16 bg-gray-200 rounded-full h-2">
+                                        <div class="bg-purple-600 h-2 rounded-full" style="width: 65%"></div>
+                                    </div>
+                                    <span class="text-sm text-neutral ml-2">中等</span>
+                                </div>
+                            </div>
+                            <button class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors">
+                                开始学习
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 路径卡片3 -->
+                <div class="bg-white rounded-xl overflow-hidden card-shadow">
+                    <div class="relative h-48">
+                        <img src="https://picsum.photos/seed/product/600/400" alt="产品经理学习路径" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 right-4">
+                                <span class="px-3 py-1 bg-orange-600/90 text-white text-xs font-medium rounded-full">
+                                    产品经理
+                                </span>
+                            <h3 class="text-xl font-bold text-white mt-2">产品经理面试全解析</h3>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center mb-4">
+                            <div class="flex -space-x-2">
+                                <img src="https://picsum.photos/seed/user7/100" alt="用户头像" class="w-8 h-8 rounded-full border-2 border-white">
+                                <img src="https://picsum.photos/seed/user8/100" alt="用户头像" class="w-8 h-8 rounded-full border-2 border-white">
+                                <img src="https://picsum.photos/seed/user9/100" alt="用户头像" class="w-8 h-8 rounded-full border-2 border-white">
+                            </div>
+                            <span class="text-sm text-neutral ml-2">已有 850+ 人学习</span>
+                        </div>
+                        <p class="text-neutral mb-6">
+                            掌握产品思维、需求分析、产品设计、数据分析等核心技能，突破产品面试难关
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="text-sm text-neutral">难度</div>
+                                <div class="flex items-center mt-1">
+                                    <div class="w-16 bg-gray-200 rounded-full h-2">
+                                        <div class="bg-orange-600 h-2 rounded-full" style="width: 60%"></div>
+                                    </div>
+                                    <span class="text-sm text-neutral ml-2">中等</span>
+                                </div>
+                            </div>
+                            <button class="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors">
+                                开始学习
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 统计数据区域 -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-[clamp(1.5rem,3vw,2.5rem)] font-bold text-dark mb-4">我们的成绩</h2>
+                <p class="text-neutral max-w-2xl mx-auto">
+                    帮助求职者成功通过技术面试
+                </p>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="bg-light rounded-xl p-6 text-center">
+                    <div class="text-4xl font-bold text-primary mb-2">90%</div>
+                    <p class="text-neutral">面试通过率</p>
+                </div>
+                <div class="bg-light rounded-xl p-6 text-center">
+                    <div class="text-4xl font-bold text-primary mb-2">500+</div>
+                    <p class="text-neutral">合作企业</p>
+                </div>
+                <div class="bg-light rounded-xl p-6 text-center">
+                    <div class="text-4xl font-bold text-primary mb-2">10k+</div>
+                    <p class="text-neutral">面试题目</p>
+                </div>
+                <div class="bg-light rounded-xl p-6 text-center">
+                    <div class="text-4xl font-bold text-primary mb-2">50k+</div>
+                    <p class="text-neutral">活跃用户</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-white pt-16 pb-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+                <div>
+                    <div class="flex items-center mb-6">
+                        <div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center mr-3">
+                            <i class="fa-solid fa-graduation-cap text-white text-xl"></i>
+                        </div>
+                        <span class="text-xl font-bold">面试题库</span>
+                    </div>
+                    <p class="text-gray-400 mb-6">
+                        帮助你提升面试技能，成功获得理想的工作
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors">
+                            <i class="fa-brands fa-github"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors">
+                            <i class="fa-brands fa-twitter"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors">
+                            <i class="fa-brands fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-6">快速链接</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">首页</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">题库</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">学习路径</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">企业合作</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">关于我们</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-6">岗位分类</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">软件开发</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">数据分析</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">产品经理</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">UI/UX设计</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">运维管理</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold mb-6">联系我们</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-envelope text-primary mt-1 mr-3"></i>
+                            <span class="text-gray-400">contact@interviewbank.com</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-phone text-primary mt-1 mr-3"></i>
+                            <span class="text-gray-400">+86 123 4567 8901</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa-solid fa-map-marker text-primary mt-1 mr-3"></i>
+                            <span class="text-gray-400">北京市海淀区中关村大街1号</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <p class="text-gray-400 text-sm">
+                        &copy; 2025 面试题库. 保留所有权利.
+                    </p>
+                    <div class="mt-4 md:mt-0 flex space-x-6">
+                        <a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">隐私政策</a>
+                        <a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">服务条款</a>
+                        <a href="#" class="text-gray-400 hover:text-white text-sm transition-colors">Cookie政策</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 答题模态框 (默认隐藏) -->
+    <div id="questionModal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-auto">
+            <div class="absolute top-4 right-4 z-10">
+                <button id="closeModal" class="w-10 h-10 rounded-full bg-white/80 flex items-center justify-center shadow-md hover:bg-white transition-colors">
+                    <i class="fa-solid fa-times text-dark"></i>
+                </button>
+            </div>
+
+            <!-- 题目内容 -->
+            <div id="questionContent" class="p-6 md:p-8">
+                <!-- 题目头部 -->
+                <div class="mb-6 flex flex-col md:flex-row md:items-center justify-between">
+                    <div>
+                        <div class="flex items-center mb-2">
+                                <span id="modalQuestionType" class="px-3 py-1 bg-blue-100 text-primary text-sm font-medium rounded-full">
+                                    软件开发
+                                </span>
+                            <span id="modalQuestionDifficulty" class="ml-3 px-3 py-1 bg-green-100 text-green-600 text-sm font-medium rounded-full">
+                                    中等难度
+                                </span>
+                        </div>
+                        <h3 id="modalQuestionTitle" class="text-2xl font-bold text-dark">
+                            请解释一下线程池的工作原理和适用场景
+                        </h3>
+                    </div>
+
+                    <div class="mt-4 md:mt-0 flex items-center">
+                        <div class="flex items-center mr-6">
+                            <i class="fa-solid fa-clock text-neutral mr-2"></i>
+                            <span id="modalQuestionTimer" class="text-neutral font-medium">15:00</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="fa-solid fa-eye text-neutral mr-2"></i>
+                            <span class="text-neutral">2.4k 次练习</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 题目描述 -->
+                <div class="bg-gray-50 rounded-xl p-6 mb-8">
+                    <p id="modalQuestionDescription" class="text-dark">
+                        线程池是一种多线程处理形式，处理过程中将任务添加到队列，然后在创建线程后自动启动这些任务。线程池线程都是后台线程。一个线程池包含以下四个基本组成部分：
+                    <ol class="list-decimal pl-5 mt-3 space-y-2">
+                        <li>线程池管理器（ThreadPool）：用于创建并管理线程池</li>
+                        <li>工作线程（WorkerThread）：线程池中线程</li>
+                        <li>任务接口（Task）：每个任务必须实现的接口，以供工作线程调度任务的执行。</li>
+                        <li>任务队列（taskQueue）：用于存放没有处理的任务。提供一种缓冲机制。</li>
+                    </ol>
+                    <br>
+                    请详细解释线程池的工作原理，并说明其适用场景。
+                    </p>
+                </div>
+
+                <!-- 选择题选项 (根据题目类型显示/隐藏) -->
+                <div id="modalQuestionOptions" class="mb-8 hidden">
+                    <h4 class="text-lg font-medium text-dark mb-4">请选择正确答案：</h4>
+                    <div class="space-y-3">
+                        <div class="p-4 border border-gray-200 rounded-lg hover:border-primary transition-colors cursor-pointer">
+                            <label class="flex items-start cursor-pointer">
+                                <input type="radio" name="modalQuestionOption" class="mt-1 mr-3">
+                                <span>选项A：线程池会预先创建一定数量的线程，当有任务提交时，从线程池中获取线程执行任务，任务执行完毕后线程不会销毁，而是返回线程池等待下一个任务。</span>
+                            </label>
+                        </div>
+                        <div class="p-4 border border-gray-200 rounded-lg hover:border-primary transition-colors cursor-pointer">
+                            <label class="flex items-start cursor-pointer">
+                                <input type="radio" name="modalQuestionOption" class="mt-1 mr-3">
+                                <span>选项B：线程池会在有任务提交时动态创建线程，任务执行完毕后线程立即销毁。</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 你的回答区域 -->
+                <div class="mb-8">
+                    <h4 class="text-lg font-medium text-dark mb-4">你的回答：</h4>
+                    <textarea id="userAnswer" class="w-full p-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary" rows="6" placeholder="请输入你的回答..."></textarea>
+                </div>
+
+                <!-- 底部按钮 -->
+                <div class="flex justify-end space-x-4">
+                    <button id="saveAnswerBtn" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg transition-all duration-200">
+                        保存草稿
+                    </button>
+                    <button id="submitAnswerBtn" class="px-6 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg transition-all duration-200 shadow-md hover:shadow-lg">
+                        提交答案
+                    </button>
+                </div>
+            </div>
+
+            <!-- 答案解析 (默认隐藏) -->
+            <div id="answerExplanation" class="p-6 md:p-8 border-t border-gray-200 hidden">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-xl font-bold text-dark">答案解析<h3 class="text-xl font-bold text-dark">答案解析</h3>
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center mr-2">
+                                <i class="fa-solid fa-check text-green-600"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm text-gray-500">得分</div>
+                                <div class="text-lg font-bold text-green-600">85/100</div>
+                            </div>
+                        </div>
+                </div>
+
+                <div class="bg-gray-50 rounded-xl p-6 mb-8">
+                    <h4 class="font-medium text-dark mb-3">参考答案：</h4>
+                    <p class="text-gray-700">
+                        线程池的工作原理主要涉及以下几个方面：
+                    <ol class="list-decimal pl-5 mt-3 space-y-2">
+                        <li>线程池初始化时会创建一定数量的工作线程，并维护一个任务队列。</li>
+                        <li>当有新任务提交时，线程池会从队列中取出任务分配给空闲线程执行。</li>
+                        <li>如果所有线程都在忙碌且线程数量未达到最大值，线程池会创建新的线程来处理任务。</li>
+                        <li>如果线程数量已达到最大值，新任务会被放入任务队列等待。</li>
+                        <li>当任务执行完毕后，线程不会立即销毁，而是返回线程池等待下一个任务。</li>
+                    </ol>
+                    <br>
+                    线程池的适用场景包括：
+                    <ul class="list-disc pl-5 mt-3 space-y-2">
+                        <li>需要大量短时间任务的场景，避免频繁创建和销毁线程带来的性能开销。</li>
+                        <li>对系统资源有限制的场景，通过限制线程数量防止系统资源耗尽。</li>
+                        <li>需要对线程进行统一管理和监控的场景。</li>
+                    </ul>
+                    </p>
+                </div>
+
+                <div class="bg-gray-50 rounded-xl p-6">
+                    <h4 class="font-medium text-dark mb-3">你的回答分析：</h4>
+                    <p class="text-gray-700">
+                        <strong>优点：</strong>
+                    <ul class="list-disc pl-5 mt-3 mb-4 space-y-2">
+                        <li>准确描述了线程池的基本概念和组成部分</li>
+                        <li>清晰解释了线程池的工作流程</li>
+                    </ul>
+                    <strong>建议改进：</strong>
+                    <ul class="list-disc pl-5 mt-3 space-y-2">
+                        <li>可以进一步说明线程池的几种常见实现方式（如FixedThreadPool、CachedThreadPool等）</li>
+                        <li>在适用场景部分，可以增加一些具体的业务场景案例</li>
+                    </ul>
+                    </p>
+                </div>
+
+                <div class="mt-8 flex justify-end">
+                    <button id="closeExplanationBtn" class="px-6 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg transition-all duration-200 shadow-md hover:shadow-lg">
+                        关闭
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+        // 侧边栏收起/展开
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('mainContent');
+        const toggleBtn = document.getElementById('toggleSidebar');
+        let collapsed = false;
+        toggleBtn.onclick = function() {
+        collapsed = !collapsed;
+        if (collapsed) {
+        sidebar.classList.remove('w-56');
+        sidebar.classList.add('w-16');
+        mainContent.classList.remove('ml-56');
+        mainContent.classList.add('ml-16');
+        // 隐藏文字
+        document.querySelectorAll('.sidebar-title,.sidebar-text').forEach(el => el.style.display = 'none');
+        toggleBtn.innerHTML = '<i class="fa-solid fa-angle-right text-xl"></i>';
+    } else {
+        sidebar.classList.remove('w-16');
+        sidebar.classList.add('w-56');
+        mainContent.classList.remove('ml-16');
+        mainContent.classList.add('ml-56');
+        // 显示文字
+        document.querySelectorAll('.sidebar-title,.sidebar-text').forEach(el => el.style.display = '');
+        toggleBtn.innerHTML = '<i class="fa-solid fa-angle-left text-xl"></i>';
+    }
+    };
+    // 导航栏滚动效果
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        if (window.scrollY > 50) {
+            navbar.classList.add('py-2', 'shadow');
+            navbar.classList.remove('py-3');
+        } else {
+            navbar.classList.add('py-3');
+            navbar.classList.remove('py-2', 'shadow');
+        }
+    });
+
+    // 移动端菜单切换
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    mobileMenuButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+
+    // 题目数据
+    const questionData = [
+        {
+            id: 1,
+            description: `线程池是一种多线程处理形式，处理过程中将任务添加到队列，然后在创建线程后自动启动这些任务。线程池线程都是后台线程。一个线程池包含以下四个基本组成部分：
+                <ol class="list-decimal pl-5 mt-3 space-y-2">
+                    <li>线程池管理器（ThreadPool）：用于创建并管理线程池</li>
+                    <li>工作线程（WorkerThread）：线程池中线程</li>
+                    <li>任务接口（Task）：每个任务必须实现的接口，以供工作线程调度任务的执行。</li>
+                    <li>任务队列（taskQueue）：用于存放没有处理的任务。提供一种缓冲机制。</li>
+                </ol>
+                <br>
+                请详细解释线程池的工作原理，并说明其适用场景。`
+        },
+        {
+            id: 2,
+            description: `SQL查询性能优化是数据库管理中的重要环节，优化查询可以显著提高数据库的响应速度和吞吐量。以下是一些常见的SQL查询性能优化方法：
+                <ol class="list-decimal pl-5 mt-3 space-y-2">
+                    <li>创建适当的索引：索引可以加快数据检索速度，特别是在WHERE子句和JOIN操作中。</li>
+                    <li>优化查询语句：避免使用SELECT *，只选择需要的列；避免在WHERE子句中使用函数；减少子查询，尽量使用JOIN替代。</li>
+                    <li>数据库表结构优化：合理设计表结构，避免数据冗余；使用适当的数据类型；规范化或反规范化设计。</li>
+                    <li>优化数据库配置：调整数据库参数，如内存分配、缓存大小等。</li>
+                    <li>定期维护数据库：清理无用数据；重建索引；更新统计信息。</li>
+                </ol>
+                <br>
+                请详细解释以上优化方法，并举例说明每种方法的适用场景。`
+        },
+        {
+            id: 3,
+            description: `内存泄漏是Android开发中常见的问题，它会导致应用占用的内存不断增加，最终可能导致应用崩溃。以下是关于Android内存泄漏的检测和避免方法：
+                <h4 class="font-medium mt-4 mb-2">内存泄漏的检测方法：</h4>
+                <ul class="list-disc pl-5 mt-2 space-y-2">
+                    <li>使用Android Profiler：可以监控内存使用情况，查看内存分配和垃圾回收情况。</li>
+                    <li>使用LeakCanary：一个开源库，可以自动检测并报告内存泄漏。</li>
+                    <li>使用Heap Dump：分析堆转储文件，找出未被垃圾回收的对象。</li>
+                </ul>
+                <h4 class="font-medium mt-4 mb-2">内存泄漏的避免方法：</h4>
+                <ul class="list-disc pl-5 mt-2 space-y-2">
+                    <li>避免Activity上下文的长生命周期引用：静态变量、单例模式等可能持有Activity引用导致泄漏。</li>
+                    <li>正确使用Context：在非必要情况下，使用ApplicationContext代替Activity Context。</li>
+                    <li>及时取消异步任务：在Activity销毁时，取消正在执行的异步任务。</li>
+                    <li>避免内部类持有外部类引用：特别是非静态内部类。</li>
+                </ul>
+                <br>
+                请详细解释Android中内存泄漏的原因，并说明如何有效地检测和避免内存泄漏。`
+        },
+        {
+            id: 4,
+            description: `秒杀系统是典型的读多写少高并发场景，需要考虑如何处理瞬时高并发、防止超卖、保证数据一致性等问题。以下是设计一个高并发秒杀系统的关键要点：
+                <h4 class="font-medium mt-4 mb-2">系统架构设计：</h4>
+                <ul class="list-disc pl-5 mt-2 space-y-2">
+                    <li>前端限流：通过验证码、按钮倒计时等方式限制用户请求频率。</li>
+                    <li>负载均衡：使用Nginx等负载均衡器将请求均匀分配到多个服务器。</li>
+                    <li>微服务架构：将秒杀业务拆分为多个微服务，提高系统可扩展性。</li>
+                </ul>
+                <h4 class="font-medium mt-4 mb-2">核心技术实现：</h4>
+                <ul class="list-disc pl-5 mt-2 space-y-2">
+                    <li>库存预减：将库存信息加载到Redis中，在Redis中进行库存预减操作。</li>
+                    <li>分布式锁：使用Redis或ZooKeeper实现分布式锁，保证同一时间只有一个请求可以处理库存。</li>
+                    <li>消息队列：使用RabbitMQ、Kafka等消息队列实现异步处理，缓解数据库压力。</li>
+                    <li>限流与熔断：使用Sentinel、Hystrix等组件实现限流和熔断，保护系统不被高并发请求压垮。</li>
+                </ul>
+                <br>
+                请详细描述你会如何设计一个高并发的秒杀系统，包括系统架构、技术选型和关键实现细节。`
+        },
+        {
+            id: 5,
+            description: `在设计领域，UI和UX是两个经常被混淆的概念。虽然它们密切相关，但代表了设计过程中的不同方面：
+                <h4 class="font-medium mt-4 mb-2">用户界面(UI)设计：</h4>
+                <ul class="list-disc pl-5 mt-2 space-y-2">
+                    <li>关注视觉呈现：颜色、排版、图标、按钮、布局等。</li>
+                    <li>创建美观且一致的界面：确保界面元素符合品牌风格，视觉层次清晰。</li>
+                    <li>交互设计：设计按钮点击效果、动画过渡、反馈机制等。</li>
+                </ul>
+                <h4 class="font-medium mt-4 mb-2">用户体验(UX)设计：</h4>
+                <ul class="list-disc pl-5 mt-2 space-y-2">
+                    <li>关注用户行为和需求：研究用户如何与产品互动，理解用户需求和痛点。</li>
+                    <li>信息架构设计：组织和结构信息，使用户能够轻松找到所需内容。</li>
+                    <li>用户流程设计：设计直观的用户操作流程，减少用户学习成本。</li>
+                </ul>
+                <br>
+                请详细解释UI和UX的区别，并说明它们在产品设计中的重要性。`
+        },
+        {
+            id: 6,
+            description: `数组和链表是两种基本的数据结构，它们在内存分配、访问方式、插入删除操作等方面有很大差异：
+                <h4 class="font-medium mt-4 mb-2">数组的优缺点：</h4>
+                <ul class="list-disc pl-5 mt-2 space-y-2">
+                    <li><strong>优点：</strong> 随机访问效率高，可以通过索引直接访问任意元素；内存连续，缓存命中率高。</li>
+                    <li><strong>缺点：</strong> 插入和删除操作效率低，需要移动大量元素；静态数组大小固定，动态数组扩容成本高。</li>
+                </ul>
+                <h4 class="font-medium mt-4 mb-2">链表的优缺点：</h4>
+                <ul class="list-disc pl-5 mt-2 space-y-2">
+                    <li><strong>优点：</strong> 插入和删除操作效率高，只需要修改指针；动态分配内存，不需要预先分配空间。</li>
+                    <li><strong>缺点：</strong> 随机访问效率低，需要从头遍历链表；内存不连续，缓存命中率低；需要额外的空间存储指针。</li>
+                </ul>
+                <br>
+                请详细比较数组和链表的优缺点，并说明它们各自的适用场景。`
+        }
+    ];
+
+    // 打开题目模态框
+    function openQuestionModal(id, type, difficulty, title, description, explanationId) {
+        const modal = document.getElementById('questionModal');
+        const questionType = document.getElementById('modalQuestionType');
+        const questionDifficulty = document.getElementById('modalQuestionDifficulty');
+        const questionTitle = document.getElementById('modalQuestionTitle');
+        const questionDescription = document.getElementById('modalQuestionDescription');
+
+        // 设置题目内容
+        questionType.textContent = type;
+        questionDifficulty.textContent = difficulty;
+        questionTitle.textContent = title;
+        questionDescription.innerHTML = description;
+
+        // 根据题目类型设置选项区域是否显示
+        const questionOptions = document.getElementById('modalQuestionOptions');
+        if (id === 1) { // 假设题目1是选择题
+            questionOptions.classList.remove('hidden');
+        } else {
+            questionOptions.classList.add('hidden');
+        }
+
+        // 显示模态框
+        modal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden'; // 禁止背景滚动
+
+        // 重置计时器
+        resetTimer();
+    }
+
+    // 关闭题目模态框
+    function closeQuestionModal() {
+        const modal = document.getElementById('questionModal');
+        modal.classList.add('hidden');
+        document.body.style.overflow = 'auto'; // 恢复背景滚动
+
+        // 隐藏答案解析，显示题目内容
+        document.getElementById('questionContent').classList.remove('hidden');
+        document.getElementById('answerExplanation').classList.add('hidden');
+    }
+
+    // 关闭答案解析
+    function closeExplanation() {
+        document.getElementById('answerExplanation').classList.add('hidden');
+        document.getElementById('questionContent').classList.remove('hidden');
+    }
+
+    // 提交答案
+    function submitAnswer() {
+        // 获取用户答案
+        const userAnswer = document.getElementById('userAnswer').value;
+
+        // 隐藏题目内容，显示答案解析
+        document.getElementById('questionContent').classList.add('hidden');
+        document.getElementById('answerExplanation').classList.remove('hidden');
+
+        // 这里可以根据用户答案做一些处理，比如评分等
+        console.log('用户答案:', userAnswer);
+    }
+
+    // 保存草稿
+    function saveAnswer() {
+        const userAnswer = document.getElementById('userAnswer').value;
+        localStorage.setItem('interview_answer_draft', userAnswer);
+        alert('答案已保存为草稿');
+    }
+
+    // 计时器功能
+    function resetTimer() {
+        const timerElement = document.getElementById('modalQuestionTimer');
+        let timeLeft = 15 * 60; // 15分钟
+
+        // 恢复可能存在的暂停状态
+        clearInterval(window.timerInterval);
+
+        // 更新计时器显示
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+
+            if (timeLeft <= 0) {
+                clearInterval(window.timerInterval);
+                alert('时间到！');
+                submitAnswer();
+            } else {
+                timeLeft--;
+            }
+        }
+
+        // 每秒更新一次
+        window.timerInterval = setInterval(updateTimer, 1000);
+        updateTimer(); // 立即更新一次
+    }
+
+    // 绑定事件监听器
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('closeModal').addEventListener('click', closeQuestionModal);
+        document.getElementById('submitAnswerBtn').addEventListener('click', submitAnswer);
+        document.getElementById('saveAnswerBtn').addEventListener('click', saveAnswer);
+        document.getElementById('closeExplanationBtn').addEventListener('click', closeExplanation);
+
+        // 恢复草稿答案
+        const draftAnswer = localStorage.getItem('interview_answer_draft');
+        if (draftAnswer) {
+            document.getElementById('userAnswer').value = draftAnswer;
+        }
+    });
+</script>
+</body>
+</html>
