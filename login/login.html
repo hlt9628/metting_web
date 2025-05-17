@@ -468,6 +468,13 @@
                                 localStorage.setItem('userEmail',userEmail);
                                 localStorage.setItem('userPassword',userPassword);
                                 localStorage.setItem('rememberMe',true);
+                                const expire = 1000 * 60 * 60 * 24;
+                                setTimeout(() => {
+                                    localStorage.removeItem('token')
+                                    localStorage.removeItem('userEmail')
+                                    localStorage.removeItem('userPassword')
+                                    localStorage.removeItem('rememberMe')
+                                }, expire)
                             }
                             showToast('登录成功！正在跳转...', 'success');
 

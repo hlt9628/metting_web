@@ -198,7 +198,7 @@
                 </div>
             </div>
 
-            <button class="start-btn-center bg-gradient-secondary text-dark font-bold py-4 px-12 rounded-full text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-yellow-300" id="startBtn">
+            <button class="start-btn-center bg-gradient-secondary text-dark font-bold py-4 px-12 rounded-full text-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-yellow-300 text-align:center" id="startBtn" >
                 开始面试
             </button>
         </div>
@@ -239,8 +239,8 @@
                     <button id="clearChatBtn" class="bg-gray-100 hover:bg-gray-200 text-gray-600 font-medium py-2 px-4 rounded-lg shadow transition-all flex items-center">
                         <i class="fa-solid fa-trash-can mr-2"></i>清空记录
                     </button>
-                    <button class="download-btn bg-primary hover:bg-primary/90 text-white font-medium py-2 px-4 rounded-lg shadow transition-all flex items-center">
-                        <i class="fa-solid fa-download mr-2"></i>下载
+                    <button class="download-btn bg-primary hover:bg-primary/90 text-white font-medium py-2 px-4 rounded-lg shadow transition-all flex items-center" onclick="gotoresume()">
+                        <i class="fa-solid fa-download mr-2"></i>上传简历
                     </button>
                 </div>
             </div>
@@ -306,6 +306,7 @@
     const backToHomeBtn = document.getElementById('backToHomeBtn');
 
     // 模拟题库
+
     const questionBank = [
         {
             keywords: ['线程池', '多线程', '并发'],
@@ -328,6 +329,9 @@
             answer: '需结合全局异常处理器、日志记录等方式处理异常，通过测试、监控等手段保障系统稳定上线。'
         }
     ];
+    function gotoresume(){
+        window.location.href = "resume.html";
+    }
 
     function connectWebSocket() {
         ws = new WebSocket(WS_URL);
@@ -502,7 +506,7 @@
 
             // 延迟显示提示
             setTimeout(function() {
-                alert('请先上传简历');
+                console.log('请先上传简历');
             }, 800);
         }, 500);
     };
