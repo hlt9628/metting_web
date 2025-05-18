@@ -74,7 +74,6 @@
             </div>
             <div class="hidden md:flex space-x-6">
                 <a href="#home" class="text-gray-700 hover:text-primary transition-colors duration-200">首页</a>
-                <a href="../interview/learning_line.html" class="text-gray-700 hover:text-primary transition-colors duration-200">个性化路线推荐</a>
                 <a href="../interview/interview.html" class="text-gray-700 hover:text-primary transition-colors duration-200">历史变化</a>
                 <a href="../interview/reporter.html" class="text-gray-700 hover:text-primary transition-colors duration-200">历史报告</a>
                 <a href="question-home.html" class="text-gray-700 hover:text-primary transition-colors duration-200">刷题</a>
@@ -393,11 +392,11 @@
         window.onload=function(){
 
             if (localStorage.hasOwnProperty("token") === false){
-                window.location.href = './../login/login.html';
+                window.location.href = '../login/login.html';
             }
         }
         function goTometting(){
-            location.href="./../interview/interview.html";
+            location.href="../interview/interview.html";
         }
         function backlogin(){
             localStorage.removeItem('token')

@@ -157,7 +157,7 @@
 </head>
 <body>
 <div class="container">
-    <a href="../home/home.html" class="btn btn-primary mt-3">返回主页</a>
+    <a href="../interview/interview.html" class="btn btn-primary mt-3">返回主页</a>
 </div>
 <div class="container">
     <div class="row">
@@ -194,8 +194,24 @@
 
 <script>
     // 从localStorage获取分析结果
-    const analysisResult = localStorage.getItem('analysisResult');
+
+    var time = new Date();
+    time = time.toLocaleString()
+    let userId = null;
+    let resumeReport = null;
+    let mettingReport = null; // 注意：Java 中可能拼写错误，应为 meetingReport？
+    const marksData = [
+        { name: 'knowledge', value: knowledgeMark, total: knowledgeMarkTotal },
+        { name: 'skill', value: skillMark, total: skillMarkTotal },
+        { name: 'logistic', value: logisticMark, total: logisticMarkTotal },
+        { name: 'create', value: createMark, total: createMarkTotal },
+        { name: 'language', value: lunguageMark, total: lunguageMarkTotal }, // 注意：原变量名可能拼写错误，应为 "language"
+        { name: 'total', value: markTotal },
+        { name: 'serialVersionUID', value: serialVersionUID }
+    ];
+    const analysisResult = localStorage.getItem('analysisResult');putMettingReport();
     if (analysisResult) {
+        resumeReport =analysisResult
         const scorePattern = /-?\*\*得分\*\*：(\d+\/\d+)/g;
         const scoreMatches = [];
         let match;
@@ -206,10 +222,8 @@
         // 提取总分计算部分内容
         const totalScorePattern = /(\d+\s*\+\s*)+\d+\s*=\s*(\d+\/\d+)/;
         const totalScoreMatch = analysisResult.match(totalScorePattern);
-
-        console.log("各项得分：");
         scoreMatches.forEach(score => {
-            console.log(score);
+            marksData
         });
 
         if (totalScoreMatch) {
@@ -229,10 +243,31 @@
             .replace(/\n/g, '<br>');
         // 自动包裹ul
         html = html.replace(/(<li>[\s\S]*?<\/li>)/g, '<ul>$1</ul>');
+
         document.getElementById('analysisResult').innerHTML = html;
+
     } else {
         document.getElementById('analysisResult').innerHTML = '<div class="no-result">未找到分析结果，请返回重新分析</div>';
     }
+    async function putMettingReport() {
+        const email=localStorage.getItem('userEmail')
+        const response = await fetch('http://localhost:8086/user/selectUser',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email
+            })
+        })
+        const data = await response.json();
+        if (data.code ==500){
+            userId=data.data.userId;
+        }
+
+
+    }
+
 
     // 示例ECharts雷达图（可根据实际数据替换）
     var chartDom = document.getElementById('echartsContainer');
