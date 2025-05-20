@@ -222,8 +222,9 @@
   let lunguageMark = null;
   let lunguageMarkTotal = null;
   let markTotal = null;
-  var time = new Date();
-    time = time.toLocaleString()
+  var resumeTime = new Date();
+    resumeTime = resumeTime.toLocaleString()
+  var time = new Date().toISOString();
   let index=0
   const analysisResult = localStorage.getItem('analysisResult');
   const lines = analysisResult.split('\n');
@@ -238,6 +239,17 @@
     const line = processedLines[index];
     checkLine(line,keywords)
   }
+  function calculateScores() {
+    if (!knowledgeScore || !skillsScore || !communicationScore || !logicScore || !innovationScore) {
+      markTotal = "N/A";
+      return;
+    }
+
+    const scores = [knowledgeScore, skillsScore, communicationScore, logicScore, innovationScore];
+    const totalMarks = scores.map(score => parseInt(score.split('/')[0], 10) || 0);
+    markTotal = totalMarks.reduce((acc, curr) => acc + curr, 0);
+  }
+  calculateScores();
   function checkLine(line, keywords) {
     switch(true){
       case line.includes(keywords[0]):
@@ -618,6 +630,7 @@
             }
             innovationPositiveSection = false;
             innovationNegativeSection = false;
+            
             return;
           }
           // 检测是否离开当前部分
@@ -637,10 +650,10 @@
       name:resume_name ,
       position: resume_position,
       photoUrl: "https://picsum.photos/seed/candidate/100/100",
-      interviewDate: time,
+      interviewDate: resumeTime,
       interviewer: "李经理",
       interviewType: "线上视频",
-      totalScore: "85/100"
+      totalScore: markTotal+"/100"
     },
     overall: {
       strengths:resume_strengths,
@@ -660,7 +673,7 @@
         id: "communication",
         title: "语言表达能力",
         weight: "15%",
-        score: "13/15",
+        score: communicationScore,
         positiveItems: communication_positiveItems,
         negativeItems: communication_negativeItems
       },
@@ -668,7 +681,7 @@
         id: "skills",
         title: "技能匹配度",
         weight: "25%",
-        score: "23/25",
+        score: skillsScore,
         positiveItems: skills_positiveItems ,
         negativeItems: skills_negativeItems
       },
@@ -962,6 +975,25 @@
     // let logicScore=null
     // let skillsScore=null
     // let innovationScore=null
+  knowledgeMark = parseFloat(knowledgeScore.split('/')[0]) || 0;
+  knowledgeMarkTotal = parseFloat(knowledgeScore.split('/')[1]) || 0;
+
+  skillMark = parseFloat(skillsScore.split('/')[0]) || 0;
+  skillMarkTotal = parseFloat(skillsScore.split('/')[1]) || 0;
+
+  // 修正拼写：lunguage => language
+  lunguageMark = parseFloat(communicationScore.split('/')[0]) || 0;
+  lunguageMarkTotal = parseFloat(communicationScore.split('/')[1]) || 0;
+
+  logisticMark = parseFloat(logicScore.split('/')[0]) || 0;
+  logisticMarkTotal = parseFloat(logicScore.split('/')[1]) || 0;
+
+  createMark = parseFloat(innovationScore.split('/')[0]) || 0;
+  createMarkTotal = parseFloat(innovationScore.split('/')[1]) || 0;
+
+  // 数值相加（而非字符串拼接）
+  markTotal = knowledgeMark + skillMark + lunguageMark + logisticMark + createMark;
+// 计算总分
     resumeReport = localStorage.getItem("analysisResult")
     const email=localStorage.getItem('userEmail')
         const response = await fetch('http://localhost:8086/user/selectUser',{
@@ -987,6 +1019,7 @@
                     userId,
                     resumeReport,
                     mettingReport,// 注意：Java 中可能拼写错误，应为 meetingReport？
+                    time,
                     knowledgeMark,
                     knowledgeMarkTotal,
                     skillMark,
@@ -997,13 +1030,14 @@
                     createMarkTotal,
                     lunguageMark,
                     lunguageMarkTotal,
-                    markTotal
+                    markTotal,
+                    resumeTime
 
                 })
             })
             const data1 = await response.json();
             if (data1.code ==200){
-                console.log(data.msg)
+                console.log(data1.msg)
             }
         }
   }
