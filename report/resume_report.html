@@ -46,6 +46,9 @@
       .content-auto {
         content-visibility: auto;
       }
+      .group-hover\:scale-110:hover {
+        transform: scale(1.1);
+      }
       .text-gradient {
         background-clip: text;
         -webkit-background-clip: text;
@@ -90,21 +93,44 @@
 </head>
 <body class="bg-neutral-100 font-inter text-neutral-700 min-h-screen">
 <!-- 顶部导航 -->
+<!-- 顶部导航 -->
 <nav class="bg-white shadow-sm sticky top-0 z-10">
   <div class="container mx-auto px-4 py-3 flex justify-between items-center">
     <div class="flex items-center space-x-2">
       <i class="fa fa-file-text-o text-primary text-2xl"></i>
       <h1 class="text-xl font-bold text-neutral-700">面试分析系统</h1>
     </div>
-    <div class="flex items-center space-x-4">
-      <button class="text-neutral-500 hover:text-primary transition-colors">
-        <i class="fa fa-question-circle"></i>
-        <span class="hidden md:inline ml-1">帮助</span>
-      </button>
-      <button class="text-neutral-500 hover:text-primary transition-colors">
-        <i class="fa fa-user-circle"></i>
-        <span class="hidden md:inline ml-1">面试官</span>
-      </button>
+    <div class="flex items-center space-x-8">
+      <!-- 醒目化处理的导航按钮 -->
+      <div class="flex items-center space-x-6">
+        <a href="./meeting_report.html" class="text-primary hover:text-primary/80 focus:text-primary/80 group relative">
+          <i class="fa fa-file-text-o mr-1 text-lg group-hover:scale-110 transition-transform"></i>
+          <span class="hidden md:inline font-semibold">面试报告</span>
+          <span class="absolute bottom-0 left-1/2 transform -translate-x-1/2 h-0.5 w-0 bg-primary transition-all group-hover:w-8"></span>
+        </a>
+
+        <a href="./total_report.html" class="text-primary hover:text-primary/80 focus:text-primary/80 group relative">
+          <i class="fa fa-line-chart mr-1 text-lg group-hover:scale-110 transition-transform"></i>
+          <span class="hidden md:inline font-semibold">总体报告</span>
+          <span class="absolute bottom-0 left-1/2 transform -translate-x-1/2 h-0.5 w-0 bg-primary transition-all group-hover:w-10"></span>
+        </a>
+      </div>
+
+      <!-- 原有功能按钮 -->
+      <div class="flex items-center space-x-4">
+        <button class="text-neutral-500 hover:text-primary transition-colors" onclick="window.location.href='../home/home.html'">
+          <i class="fa fa-home"></i>
+          <span class="hidden md:inline ml-1">返回主页</span>
+        </button>
+        <button class="text-neutral-500 hover:text-primary transition-colors">
+          <i class="fa fa-question-circle"></i>
+          <span class="hidden md:inline ml-1">帮助</span>
+        </button>
+        <button class="text-neutral-500 hover:text-primary transition-colors">
+          <i class="fa fa-user-circle"></i>
+          <span class="hidden md:inline ml-1">面试官</span>
+        </button>
+      </div>
     </div>
   </div>
 </nav>

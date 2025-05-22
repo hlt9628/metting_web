@@ -272,7 +272,7 @@
                     </div>
                 </div>
             </div>
-
+            
             <!-- 题目区 -->
             <div class="qa-section w-full md:w-3/5 lg:w-2/3 bg-gray-50 p-6 overflow-y-auto">
                 <div class="qa-title text-xl font-bold text-dark mb-6">面试题目</div>
@@ -291,6 +291,7 @@
     const APP_ID = '3bf2e419';
     const API_KEY = '0e35ab842bd3a42602b36a462c68f971';
     const API_SECRET = 'MjEzMzNhZjE4NTNjZTljMjZmYjEyM2Uz';
+    let qus_ans = [];
 
     let ws;
     let currentBotDiv = null;
@@ -338,11 +339,15 @@
         ws.onopen = function() {
             console.log('WebSocket已连接');
         };
-        ws.onmessage = function(event) {
-            const response = JSON.parse(event.data);
-            const messages = response.payload.choices.text;
-            if (!currentBotDiv) {
-                currentBotDiv = document.createElement('div');
+         ws.onmessage = function(event) {
+        const response = JSON.parse(event.data);
+        const messages = response.payload.choices.text;
+        
+        // 处理新回答时，先检查是否有正在进行的用户消息
+        if (!currentUserMessage) return; // 无对应问题时忽略回答
+
+        if (!currentBotDiv) {
+            currentBotDiv = document.createElement('div');
                 currentBotDiv.className = 'flex items-start mb-6 animate-fade-in';
                 currentBotDiv.innerHTML = `
                         <div class="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
@@ -367,16 +372,24 @@
                     const card = document.createElement('div');
                     card.className = 'qa-card bg-white rounded-xl shadow-sm hover:shadow-md transition-all p-6 hover-scale mb-6';
                     card.innerHTML = `
-                        <div class="question font-bold text-lg text-dark mb-3">用户问题：${currentUserMessage}</div>
-                        <div class="answer text-neutral">AI回答：${currentBotDiv.querySelector('.bot-message').textContent.trim()}</div>
+                        <div class="question font-bold text-lg text-dark mb-3">用户：${currentUserMessage}</div>
+                        <div class="answer text-neutral">ai：${currentBotDiv.querySelector('.bot-message').textContent.trim()}</div>
                     `;
                     qaList.appendChild(card);
+                     qus_ans = [...qus_ans, {
+                        qus: currentUserMessage,
+                        ans: currentBotDiv.querySelector('.bot-message').textContent.trim()
+                    }];
+                    console.log(qus_ans[0])
+                    console.log(currentUserMessage)
+                    console.log(currentBotDiv.querySelector('.bot-message').textContent.trim())
                     currentUserMessage = null; // 重置当前用户消息
                 }
+                currentUserMessage = null;
                 currentBotDiv = null;
             }
             chatBody.scrollTop = chatBody.scrollHeight;
-        };
+        }; 
         ws.onerror = function(err) {
             console.log('WebSocket错误', err);
         };
@@ -396,8 +409,14 @@
     };
 
     function sendMessage() {
-        const text = chatInput.value.trim();
+         const text = chatInput.value.trim();
         if (!text || ws.readyState !== WebSocket.OPEN) return;
+
+        // 清空当前可能存在的未完成回答
+        if (currentBotDiv) {
+            chatBody.removeChild(currentBotDiv);
+            currentBotDiv = null;
+        }
 
         // 保存当前用户消息
         currentUserMessage = text;
@@ -455,6 +474,7 @@
         // 获取所有用户消息和AI回复
         const userMessages = chatBody.querySelectorAll('.flex.items-start.justify-end');
         const botMessages = chatBody.querySelectorAll('.flex.items-start:not(.justify-end)');
+        
 
         // 过滤掉欢迎消息和系统提示
         const filteredBotMessages = Array.from(botMessages).filter(msg =>
@@ -463,18 +483,20 @@
         );
 
         // 展示所有历史对话
-        for (let i = 0; i < userMessages.length; i++) {
-            const userMessage = userMessages[i].querySelector('.bg-primary\\/10').textContent.trim();
-            const botMessage = filteredBotMessages[i]?.querySelector('.bot-message')?.textContent.trim() || '';
-
-            const card = document.createElement('div');
-            card.className = 'qa-card bg-white rounded-xl shadow-sm hover:shadow-md transition-all p-6 hover-scale mb-6';
-            card.innerHTML = `
-                <div class="question font-bold text-lg text-dark mb-3">用户问题：${userMessage}</div>
-                <div class="answer text-neutral">AI回答：${botMessage}</div>
-            `;
-            qaList.appendChild(card);
-        }
+        // for (let i = 0; i < userMessages.length; i++) {
+        //     const userMessage = userMessages[i].querySelector('.bg-primary\\/10').textContent.trim();
+        //     const botMessage = filteredBotMessages[i]?.querySelector('.bot-message')?.textContent.trim() || '';
+        //     console.log(userMessage)
+        //     console.log(botMessage)
+        //     const card = document.createElement('div');
+        //     card.className = 'qa-card bg-white rounded-xl shadow-sm hover:shadow-md transition-all p-6 hover-scale mb-6';
+        //     card.innerHTML = `
+        //         <div class="question font-bold text-lg text-dark mb-3">用户问题：${userMessage}</div>
+        //         <div class="answer text-neutral">AI回答：${botMessage}</div>
+        //     `;
+            
+        //     qaList.appendChild(card);
+        // }
 
         // 如果没有对话内容，显示提示信息
         if (userMessages.length === 0) {
@@ -512,8 +534,7 @@
     };
 
     // 添加清空聊天记录功能
-    clearChatBtn.onclick = function() {
-        // 创建确认对话框
+     clearChatBtn.onclick = function() {
         const confirmDialog = document.createElement('div');
         confirmDialog.className = 'fixed inset-0 z-50 flex items-center justify-center bg-black/50';
         confirmDialog.innerHTML = `
@@ -532,27 +553,24 @@
         `;
         document.body.appendChild(confirmDialog);
 
-        // 绑定取消按钮事件
-        confirmDialog.querySelector('.cancel-btn').onclick = function() {
-            document.body.removeChild(confirmDialog);
-        };
-
-        // 绑定确认按钮事件
-        confirmDialog.querySelector('.confirm-btn').onclick = function() {
-            // 保留欢迎消息
-            const welcomeMessage = chatBody.querySelector('.welcome-message');
-            chatBody.innerHTML = '';
-            if (welcomeMessage) {
-                chatBody.appendChild(welcomeMessage);
+         confirmDialog.querySelector('.confirm-btn').onclick = function() {
+        // 关闭现有WebSocket连接
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.close();
             }
-
-            // 清空题目区
+            // 1. 清空聊天区（保留欢迎消息）
+            const welcomeMessage = chatBody.querySelector('.welcome-message');
+            chatBody.innerHTML = welcomeMessage ? welcomeMessage.outerHTML : '';
+            
+            // 2. 清空题目区
             qaList.innerHTML = '';
-
-            // 关闭确认对话框
-            document.body.removeChild(confirmDialog);
-
-            // 显示清空成功提示
+            
+            // 3. 重置所有状态变量
+            currentUserMessage = null;
+            currentBotDiv = null;
+            qus_ans = []; // 清空问答数组
+            
+            // 4. 显示清空成功提示
             const successMessage = document.createElement('div');
             successMessage.className = 'flex items-start mb-6 animate-fade-in';
             successMessage.innerHTML = `
@@ -562,12 +580,15 @@
                 <div class="ml-3 max-w-[85%]">
                     <h4 class="font-medium text-green-500">系统提示</h4>
                     <div class="bg-green-50 mt-1 p-4 rounded-xl text-green-600">
-                        聊天记录已清空
+                        聊天记录已清空，当前为全新会话
                     </div>
                 </div>
             `;
             chatBody.appendChild(successMessage);
             chatBody.scrollTop = chatBody.scrollHeight;
+
+            // 移除确认对话框
+            document.body.removeChild(confirmDialog);
         };
     };
 

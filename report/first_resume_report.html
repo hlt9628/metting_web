@@ -96,19 +96,37 @@
       <i class="fa fa-file-text-o text-primary text-2xl"></i>
       <h1 class="text-xl font-bold text-neutral-700">面试分析系统</h1>
     </div>
-    <div class="flex items-center space-x-4">
-      <button class="text-neutral-500 hover:text-primary transition-colors">
-        <i class="fa fa-question-circle"></i>
-        <span class="hidden md:inline ml-1">帮助</span>
-      </button>
-      <button class="text-neutral-500 hover:text-primary transition-colors">
-        <i class="fa fa-user-circle"></i>
-        <span class="hidden md:inline ml-1">面试官</span>
-      </button>
+    <div class="flex items-center space-x-6">
+      <!-- 新增导航按钮 -->
+      <div class="flex items-center space-x-4">
+        <button class="text-neutral-500 hover:text-primary transition-colors group">
+          <i class="fa fa-file-text-o mr-1"></i>
+          <span class="hidden md:inline">面试报告</span>
+        </button>
+        <button class="text-neutral-500 hover:text-primary transition-colors group">
+          <i class="fa fa-line-chart mr-1"></i>
+          <span class="hidden md:inline">总体报告</span>
+        </button>
+      </div>
+
+      <!-- 原有功能按钮 -->
+      <div class="flex items-center space-x-4">
+        <button class="text-neutral-500 hover:text-primary transition-colors" onclick="window.location.href='/home'">
+          <i class="fa fa-home"></i>
+          <span class="hidden md:inline ml-1">返回主页</span>
+        </button>
+        <button class="text-neutral-500 hover:text-primary transition-colors">
+          <i class="fa fa-question-circle"></i>
+          <span class="hidden md:inline ml-1">帮助</span>
+        </button>
+        <button class="text-neutral-500 hover:text-primary transition-colors">
+          <i class="fa fa-user-circle"></i>
+          <span class="hidden md:inline ml-1">面试官</span>
+        </button>
+      </div>
     </div>
   </div>
 </nav>
-
 <!-- 主要内容 -->
 <main class="container mx-auto px-4 py-8">
   <!-- 报告标题 -->
@@ -358,7 +376,7 @@
 
           // 处理正向加分项
           if (knowledgePositiveSection && !currentLine.includes(keywords[8])) {
-            const parts = currentLine.split(".");
+            const parts = currentLine.split(/\.\s+/, 2);
             if (parts.length > 1) {
               knowledge_positiveItems.push(parts[1].trim());
               console.log("正向加分项:", parts[1].trim());
@@ -367,7 +385,7 @@
 
           // 处理负向减分项
           if (knowledgeNegativeSection && !currentLine.includes(keywords[8])) {
-            const parts = currentLine.split(".");
+            const parts = currentLine.split(/\.\s+/, 2);
             if (parts.length > 1) {
               knowledge_negativeItems.push(parts[1].trim());
               console.log("负向减分项:", parts[1].trim());
@@ -420,7 +438,7 @@
 
           // 处理正向加分项
           if (communicationPositiveSection  && !currentLine.includes(keywords[8])) {
-            const parts = currentLine.split(".");
+            const parts = currentLine.split(/\.\s+/, 2);
             if (parts.length > 1) {
               communication_positiveItems.push(parts[1].trim());
               console.log("正向加分项:", parts[1].trim());
@@ -429,7 +447,7 @@
 
           // 处理负向减分项
           if (communicationNegativeSection && !currentLine.includes(keywords[8])) {
-            const parts = currentLine.split(".");
+            const parts = currentLine.split(/\.\s+/, 2);
             if (parts.length > 1) {
               communication_negativeItems.push(parts[1].trim());
               console.log("负向减分项:", parts[1].trim());
@@ -482,7 +500,7 @@
 
           // 处理正向加分项
           if (skillsPositiveSection && !currentLine.includes(keywords[8])) {
-            const parts = currentLine.split(".");
+            const parts = currentLine.split(/\.\s+/, 2);
             if (parts.length > 1) {
               skills_positiveItems.push(parts[1].trim());
               console.log("正向加分项:", parts[1].trim());
@@ -491,7 +509,7 @@
 
           // 处理负向减分项
           if (skillsNegativeSection && !currentLine.includes(keywords[8])) {
-            const parts = currentLine.split(".");
+            const parts = currentLine.split(/\.\s+/, 2);
             if (parts.length > 1) {
               skills_negativeItems.push(parts[1].trim());
               console.log("负向减分项:", parts[1].trim());
@@ -544,7 +562,7 @@
 
           // 处理正向加分项
           if (logicPositiveSection && !currentLine.includes(keywords[8])) {
-            const parts = currentLine.split(".");
+            const parts = currentLine.split(/\.\s+/, 2);
             if (parts.length > 1) {
               logic_positiveItems.push(parts[1].trim());
               console.log("正向加分项:", parts[1].trim());
@@ -553,7 +571,7 @@
 
           // 处理负向减分项
           if (logicNegativeSection && !currentLine.includes(keywords[8])) {
-            const parts = currentLine.split(".");
+            const parts = currentLine.split(/\.\s+/, 2);
             if (parts.length > 1) {
               logic_negativeItems.push(parts[1].trim());
               console.log("负向减分项:", parts[1].trim());
@@ -605,7 +623,7 @@
 
           // 处理正向加分项
           if (innovationPositiveSection && !currentLine.includes(keywords[8])) {
-            const parts = currentLine.split(".");
+            const parts = currentLine.split(/\.\s+/, 2);
             if (parts.length > 1) {
               innovation_positiveItems.push(parts[1].trim());
               console.log("正向加分项:", parts[1].trim());
@@ -614,7 +632,7 @@
 
           // 处理负向减分项
           if (innovationNegativeSection && !currentLine.includes(keywords[8])) {
-            const parts = currentLine.split(".");
+            const parts = currentLine.split(/\.\s+/, 2);
             if (parts.length > 1) {
               innovation_negativeItems.push(parts[1].trim());
               console.log("负向减分项:", parts[1].trim());
@@ -1038,6 +1056,7 @@
             const data1 = await response.json();
             if (data1.code ==200){
                 console.log(data1.msg)
+                window.location.href="./another_metting.html"
             }
         }
   }
