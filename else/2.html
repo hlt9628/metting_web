@@ -89,6 +89,79 @@
                 -ms-overflow-style: none;
                 scrollbar-width: none;
             }
+            
+            /* 进度条样式 */
+            .progress-container {
+                background: white;
+                padding: 0.5rem 1rem;
+                border-radius: 0.5rem;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            }
+            
+            .progress-steps {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+            
+            .step {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 0.25rem;
+            }
+            
+            .step-icon {
+                width: 2rem;
+                height: 2rem;
+                border-radius: 50%;
+                background: #e5e7eb;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #6b7280;
+                transition: all 0.3s ease;
+            }
+            
+            .step.active .step-icon {
+                background: #2563eb;
+                color: white;
+                animation: pulse 2s infinite;
+            }
+            
+            .step-label {
+                font-size: 0.75rem;
+                color: #6b7280;
+                transition: all 0.3s ease;
+            }
+            
+            .step.active .step-label {
+                color: #2563eb;
+                font-weight: 500;
+            }
+            
+            .step-line {
+                width: 2rem;
+                height: 2px;
+                background: #e5e7eb;
+                transition: all 0.3s ease;
+            }
+            
+            .step.active + .step-line {
+                background: #2563eb;
+            }
+            
+            @keyframes pulse {
+                0% {
+                    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4);
+                }
+                70% {
+                    box-shadow: 0 0 0 6px rgba(37, 99, 235, 0);
+                }
+                100% {
+                    box-shadow: 0 0 0 0 rgba(37, 99, 235, 0);
+                }
+            }
         }
     </style>
 </head>
@@ -230,8 +303,57 @@
 </div>
 
 <div class="container hidden" id="mainContainer">
+    <!-- 简历上传弹窗 -->
+    <div id="resumeUploadModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 hidden">
+        <div class="bg-white rounded-xl p-8 max-w-4xl w-full mx-4 animate-fade-in">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-dark">简历智能分析</h2>
+                <button onclick="closeResumeModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <i class="fa-solid fa-xmark text-2xl"></i>
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- 左侧：上传区域 -->
+                <div class="space-y-6">
+                    <div class="upload-area border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-primary transition-colors cursor-pointer" onclick="document.getElementById('resumeImage').click()">
+                        <input type="file" class="hidden" id="resumeImage" accept="image/*" required>
+                        <div class="space-y-3">
+                            <i class="fa-solid fa-cloud-arrow-up text-4xl text-gray-400"></i>
+                            <div class="text-gray-600">
+                                <p class="font-medium">点击或拖拽上传简历</p>
+                                <p class="text-sm mt-1">支持 JPG、PNG 格式，建议图片清晰度不低于 300dpi</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="preview-section">
+                        <img id="imagePreview" class="w-full h-auto rounded-lg border border-gray-200 hidden" alt="简历预览">
+                    </div>
+                </div>
+                
+                <!-- 右侧：问题输入区域 -->
+                <div class="space-y-6">
+                    <div class="bg-gray-50 rounded-xl p-6">
+                        <div class="flex items-center space-x-3 mb-4">
+                            <i class="fa-solid fa-robot text-primary text-xl"></i>
+                            <h3 class="text-lg font-medium text-dark">简历分析</h3>
+                        </div>
+                        <p class="text-gray-600">上传简历后将自动进行分析</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 加载状态 -->
+            <div id="uploadLoading" class="hidden mt-6 text-center">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-primary border-t-transparent"></div>
+                <p class="mt-2 text-gray-600">正在分析中，请稍候...</p>
+            </div>
+        </div>
+    </div>
+
     <!-- 左侧导航栏 -->
-    <div class="sidebar bg-dark text-white w-16 md:w-20 flex flex-col items-center py-8 fixed h-full z-20 transition-all duration-300">
+    <!-- <div class="sidebar bg-dark text-white w-16 md:w-20 flex flex-col items-center py-8 fixed h-full z-20 transition-all duration-300">
         <div class="avatar w-10 h-10 md:w-12 md:h-12 rounded-full bg-white mb-10 flex items-center justify-center shadow-lg">
             <i class="fa-solid fa-robot text-primary"></i>
         </div>
@@ -247,16 +369,48 @@
                 <i class="fa-solid fa-history text-lg"></i>
             </div>
         </div>
-    </div>
+    </div> -->
 
     <!-- 右侧主内容区 -->
-    <div class="main-content ml-16 md:ml-20 flex flex-col h-screen">
+    <div class="main-content flex flex-col h-screen">
         <div class="main-header bg-white border-b border-gray-200 px-6 py-4 shadow-sm sticky top-0 z-10">
             <div class="flex justify-between items-center">
                 <div class="title text-xl md:text-2xl font-bold text-dark">
                     <i class="fa-solid fa-comments text-primary mr-2"></i>智能面试助手
                 </div>
                 <div class="flex items-center space-x-3">
+                    <!-- 添加进度条组件 -->
+                    <div class="progress-container flex items-center space-x-2">
+                        <div class="progress-steps flex items-center">
+                            <div class="step active">
+                                <div class="step-icon">
+                                    <i class="fa-solid fa-upload"></i>
+                                </div>
+                                <div class="step-label">开始分析</div>
+                            </div>
+                            <div class="step-line"></div>
+                            <div class="step">
+                                <div class="step-icon">
+                                    <i class="fa-solid fa-file-alt"></i>
+                                </div>
+                                <div class="step-label">简历分析</div>
+                            </div>
+                            <div class="step-line"></div>
+                            <div class="step">
+                                <div class="step-icon">
+                                    <i class="fa-solid fa-comments"></i>
+                                </div>
+                                <div class="step-label">面试分析</div>
+                            </div>
+                            <div class="step-line"></div>
+                            <div class="step">
+                                <div class="step-icon">
+                                    <i class="fa-solid fa-chart-pie"></i>
+                                </div>
+                                <div class="step-label">总体分析</div>
+                            </div>
+                        </div>
+                    </div>
                     <button id="backToHomeBtn" class="bg-gray-100 hover:bg-gray-200 text-gray-600 font-medium py-2 px-4 rounded-lg shadow transition-all flex items-center">
                         <i class="fa-solid fa-house mr-2"></i>返回主页
                     </button>
@@ -399,7 +553,7 @@
     const API_KEY = '0e35ab842bd3a42602b36a462c68f971';
     const API_SECRET = 'MjEzMzNhZjE4NTNjZTljMjZmYjEyM2Uz';
     let qus_ans = [];
-
+    let resume=[]
     let ws;
     let currentBotDiv = null;
     let currentUserMessage = null; // 添加变量存储当前用户消息
@@ -408,7 +562,13 @@
     let audioChunks = [];
     let setAIqustion = null;
     let addToHistory_status=false;
-    
+    let isUpload = false
+    let analysisResult = null;
+    var resumeTime = new Date();
+            resumeTime = resumeTime.toLocaleString()
+    var time = new Date().toISOString();
+    const index=0
+    const lines = null;
     // DOM元素
     const chatBody = document.getElementById('chatBody');
     const chatInput = document.getElementById('chatInput');
@@ -741,6 +901,9 @@
             startBtn.classList.remove('scale-95');
         }, 150);
 
+        // 初始化进度条
+        updateProgress(0);
+
         // 页面切换动画
         startOverlay.classList.add('opacity-0', 'pointer-events-none');
         startOverlay.style.transition = 'opacity 0.5s ease-in-out';
@@ -776,14 +939,13 @@
             </div>
         `;
         document.body.appendChild(confirmDialog);
-
         confirmDialog.querySelector('.confirm-btn').onclick = function() {
             // 关闭现有WebSocket连接
             if (ws && ws.readyState === WebSocket.OPEN) {
                 ws.close();
             }
+            resetUploadForm()
             chatBody.innerHTML = '';
-    
             // 显示空状态提示
             document.getElementById('historyContainer').classList.remove('hidden');
             // 清空题目区
@@ -905,8 +1067,430 @@
     
     // 将面试的问题和答案存储到redis
     async function sendTotalMessage(question_answer){
+        updateProgress(1);
+        submitResume()
         const response = await fetch('http://localhost:8086/Metting/UserMeeting')
     }
+    // 对简历的数据进行处理
+    async function solveResume() {
+        lines = analysisResult.split('\n');
+        console.log(lines.length);
+        const keywords=["**评测对象**","**目标岗位**","**优势**","**待改进项**","**竞争力定位**","（一）专业知识水平","正向加分项","负向减分项","**得分**","（二）技能匹配度","（三）语言表达能力","（四）逻辑思维能力","（五）创新能力"]
+        for (let i = 0; i < lines.length; i++){
+            const line = lines[i].trim();
+            processedLines = lines.map(line => line.trim());
+        }
+        console.log(processedLines.length)
+        for (index=0;index<processedLines.length;index++){
+            const line = processedLines[index];
+            checkLine(line,keywords)
+        }
+        function calculateScores() {
+            if (!knowledgeScore || !skillsScore || !communicationScore || !logicScore || !innovationScore) {
+            markTotal = "N/A";
+            return;
+            }
+
+            const scores = [knowledgeScore, skillsScore, communicationScore, logicScore, innovationScore];
+            const totalMarks = scores.map(score => parseInt(score.split('/')[0], 10) || 0);
+            markTotal = totalMarks.reduce((acc, curr) => acc + curr, 0);
+        }
+        calculateScores();
+        function checkLine(line, keywords) {
+            switch(true){
+            case line.includes(keywords[0]):
+                console.log("匹配到"+keywords[0])
+                resume_name =line.split("：")[1].trim()
+                console.log(resume_name)
+                break;
+            case line.includes(keywords[1]):
+                console.log("匹配到"+keywords[1])
+                resume_position =line.split("：")[1].trim()
+                console.log(resume_position)
+                break;
+            case line.includes(keywords[2]):
+                console.log("匹配到"+keywords[2])
+                let strengthsIndex = index+1;
+                while (strengthsIndex < processedLines.length) {
+                const line = processedLines[strengthsIndex];
+
+                // 如果行不包含任何关键词，则处理它
+                if (!keywords.some(keyword => line.includes(keyword))) {
+                    // 处理逻辑：分割并取第二部分，移除星号
+                    const parts = line.split(".");
+                    if (parts.length > 1) { // 确保有第二部分
+                    const processedLine = parts[1].trim().replaceAll("*", "");
+                    resume_strengths.push(processedLine)
+
+                    // 这里可以添加进一步的处理逻辑，例如保存结果
+                    }
+                    strengthsIndex++; // 继续处理下一行
+                } else {
+                    break; // 遇到关键词，停止处理
+                }
+                }
+                console.log(resume_strengths)
+                break;
+            case line.includes(keywords[3]):
+                console.log("匹配到"+keywords[3])
+                let improvementsIndex = index+1;
+                while (improvementsIndex < processedLines.length) {
+                const line = processedLines[improvementsIndex];
+
+                // 如果行不包含任何关键词，则处理它
+                if (!keywords.some(keyword => line.includes(keyword))) {
+                    // 处理逻辑：分割并取第二部分，移除星号
+                    const parts = line.split(".");
+                    if (parts.length > 1) { // 确保有第二部分
+                    const processedLine = parts[1].trim().replaceAll("*", "");
+                    resume_improvements.push(processedLine)
+
+                    // 这里可以添加进一步的处理逻辑，例如保存结果
+                    }
+                    improvementsIndex++; // 继续处理下一行
+                } else {
+                    break; // 遇到关键词，停止处理
+                }
+                }
+                console.log(resume_improvements)
+                break;
+            case line.includes(keywords[4]):
+                console.log("匹配到"+keywords[4])
+                let competitivenessIndex = index+1;
+                while (competitivenessIndex < processedLines.length) {
+                const line = processedLines[competitivenessIndex];
+                let processedLine = line
+                // 如果行不包含任何关键词，则处理它
+                if (!keywords.some(keyword => line.includes(keyword))) {
+                    if (line.includes("*")){
+                    processedLine  = processedLine.replaceAll("*","")
+                    resume_competitiveness.push(processedLine)
+                    }
+                    else{
+                    resume_competitiveness.push(processedLine)
+                    }
+                    // 这里可以添加进一步的处理逻辑，例如保存结果
+                    competitivenessIndex++; // 继续处理下一行
+                } else {
+                    break; // 遇到关键词，停止处理
+                }
+                }
+                console.log(resume_competitiveness)
+                break;
+            case line.includes(keywords[5]):
+                console.log("匹配到"+keywords[5]);
+                let knowledgeIndex = index + 1;
+                let knowledgePositiveSection = false;
+                let knowledgeNegativeSection = false;
+
+                while (knowledgeIndex < processedLines.length) {
+                const currentLine = processedLines[knowledgeIndex];
+
+                // 检测是否进入正向加分项部分
+                if (currentLine.includes(keywords[6])) {
+                    knowledgePositiveSection = true;
+                    knowledgeNegativeSection = false;
+                    knowledgeIndex++;
+                    continue;
+                }
+
+                // 检测是否进入负向减分项部分
+                if (currentLine.includes(keywords[7])) {
+                    knowledgePositiveSection = false;
+                    knowledgeNegativeSection = true;
+                    knowledgeIndex++;
+                    continue;
+                }
+
+                // 处理正向加分项
+                if (knowledgePositiveSection && !currentLine.includes(keywords[8])) {
+                    const parts = currentLine.split(/\.\s+/, 2);
+                    if (parts.length > 1) {
+                    knowledge_positiveItems.push(parts[1].trim());
+                    console.log("正向加分项:", parts[1].trim());
+                    }
+                }
+
+                // 处理负向减分项
+                if (knowledgeNegativeSection && !currentLine.includes(keywords[8])) {
+                    const parts = currentLine.split(/\.\s+/, 2);
+                    if (parts.length > 1) {
+                    knowledge_negativeItems.push(parts[1].trim());
+                    console.log("负向减分项:", parts[1].trim());
+                    }
+                }
+
+                // 处理得分
+                if (currentLine.includes(keywords[8])) {
+                    const parts = currentLine.split("：");
+                    if (parts.length > 1) {
+                    knowledgeScore = parts[1].trim().substring(0, 5);
+                    console.log("得分:", knowledgeScore);
+                    }
+                    knowledgePositiveSection = false;
+                    knowledgeNegativeSection = false;
+                }
+
+                // 检测是否离开当前部分
+                if (currentLine.includes(keywords[9])) {
+                    break;
+                }
+
+                knowledgeIndex++;
+                }
+                break;
+            case line.includes(keywords[10]):
+                console.log("匹配到"+keywords[10]);
+                let communicationIndex = index + 1;
+                let communicationPositiveSection = false;
+                let communicationNegativeSection = false;
+
+                while (communicationIndex < processedLines.length) {
+                const currentLine = processedLines[communicationIndex];
+
+                // 检测是否进入正向加分项部分
+                if (currentLine.includes(keywords[6])) {
+                    communicationPositiveSection  = true;
+                    communicationNegativeSection = false;
+                    communicationIndex++;
+                    continue;
+                }
+
+                // 检测是否进入负向减分项部分
+                if (currentLine.includes(keywords[7])) {
+                    communicationPositiveSection  = false;
+                    communicationNegativeSection = true;
+                    communicationIndex++;
+                    continue;
+                }
+
+                // 处理正向加分项
+                if (communicationPositiveSection  && !currentLine.includes(keywords[8])) {
+                    const parts = currentLine.split(/\.\s+/, 2);
+                    if (parts.length > 1) {
+                    communication_positiveItems.push(parts[1].trim());
+                    console.log("正向加分项:", parts[1].trim());
+                    }
+                }
+
+                // 处理负向减分项
+                if (communicationNegativeSection && !currentLine.includes(keywords[8])) {
+                    const parts = currentLine.split(/\.\s+/, 2);
+                    if (parts.length > 1) {
+                    communication_negativeItems.push(parts[1].trim());
+                    console.log("负向减分项:", parts[1].trim());
+                    }
+                }
+
+                // 处理得分
+                if (currentLine.includes(keywords[8])) {
+                    const parts = currentLine.split("：");
+                    if (parts.length > 1) {
+                    communicationScore = parts[1].trim().substring(0, 5);
+                    console.log("得分:", communicationScore);
+                    }
+                    communicationPositiveSection  = false;
+                    communicationNegativeSection = false;
+                }
+
+                // 检测是否离开当前部分
+                if (currentLine.includes(keywords[11])) {
+                    break;
+                }
+
+                communicationIndex++;
+                }
+                break;
+            case line.includes(keywords[9]):
+                console.log("匹配到"+keywords[9]);
+                let skillsIndex = index + 1;
+                let skillsPositiveSection = false;
+                let skillsNegativeSection = false;
+
+                while (skillsIndex < processedLines.length) {
+                const currentLine = processedLines[skillsIndex];
+
+                // 检测是否进入正向加分项部分
+                if (currentLine.includes(keywords[6])) {
+                    skillsPositiveSection = true;
+                    skillsNegativeSection = false;
+                    skillsIndex++;
+                    continue;
+                }
+
+                // 检测是否进入负向减分项部分
+                if (currentLine.includes(keywords[7])) {
+                    skillsPositiveSection = false;
+                    skillsNegativeSection = true;
+                    skillsIndex++;
+                    continue;
+                }
+
+                // 处理正向加分项
+                if (skillsPositiveSection && !currentLine.includes(keywords[8])) {
+                    const parts = currentLine.split(/\.\s+/, 2);
+                    if (parts.length > 1) {
+                    skills_positiveItems.push(parts[1].trim());
+                    console.log("正向加分项:", parts[1].trim());
+                    }
+                }
+
+                // 处理负向减分项
+                if (skillsNegativeSection && !currentLine.includes(keywords[8])) {
+                    const parts = currentLine.split(/\.\s+/, 2);
+                    if (parts.length > 1) {
+                    skills_negativeItems.push(parts[1].trim());
+                    console.log("负向减分项:", parts[1].trim());
+                    }
+                }
+
+                // 处理得分
+                if (currentLine.includes(keywords[8])) {
+                    const parts = currentLine.split("：");
+                    if (parts.length > 1) {
+                    skillsScore = parts[1].trim().substring(0, 5);
+                    console.log("得分:",skillsScore);
+                    }
+                    skillsPositiveSection = false;
+                    skillsNegativeSection = false;
+                }
+
+                // 检测是否离开当前部分
+                if (currentLine.includes(keywords[10])) {
+                    break;
+                }
+
+                skillsIndex++;
+                }
+                break;
+            case line.includes(keywords[11]):
+                console.log("匹配到"+keywords[11]);
+                let logicIndex = index + 1;
+                let logicPositiveSection = false;
+                let logicNegativeSection = false;
+
+                while (logicIndex < processedLines.length) {
+                const currentLine = processedLines[logicIndex];
+
+                // 检测是否进入正向加分项部分
+                if (currentLine.includes(keywords[6])) {
+                    logicPositiveSection = true;
+                    logicNegativeSection = false;
+                    logicIndex++;
+                    continue;
+                }
+
+                // 检测是否进入负向减分项部分
+                if (currentLine.includes(keywords[7])) {
+                    logicPositiveSection = false;
+                    logicNegativeSection = true;
+                    logicIndex++;
+                    continue;
+                }
+
+                // 处理正向加分项
+                if (logicPositiveSection && !currentLine.includes(keywords[8])) {
+                    const parts = currentLine.split(/\.\s+/, 2);
+                    if (parts.length > 1) {
+                    logic_positiveItems.push(parts[1].trim());
+                    console.log("正向加分项:", parts[1].trim());
+                    }
+                }
+
+                // 处理负向减分项
+                if (logicNegativeSection && !currentLine.includes(keywords[8])) {
+                    const parts = currentLine.split(/\.\s+/, 2);
+                    if (parts.length > 1) {
+                    logic_negativeItems.push(parts[1].trim());
+                    console.log("负向减分项:", parts[1].trim());
+                    }
+                }
+
+                // 处理得分
+                if (currentLine.includes(keywords[8])) {
+                    const parts = currentLine.split("：");
+                    if (parts.length > 1) {
+                    logicScore = parts[1].trim().substring(0, 5);
+                    console.log("得分:",logicScore);
+                    }
+                    logicPositiveSection = false;
+                    logicNegativeSection = false;
+                }
+
+                // 检测是否离开当前部分
+                if (currentLine.includes(keywords[12])) {
+                    break;
+                }
+                logicIndex++;
+                }
+                break;
+            case line.includes(keywords[12]):
+                console.log("匹配到"+keywords[12]);
+                let innovationIndex = index + 1;
+                let innovationPositiveSection = false;
+                let innovationNegativeSection = false;
+
+                while (innovationIndex < processedLines.length) {
+                const currentLine = processedLines[innovationIndex];
+
+                // 检测是否进入正向加分项部分
+                if (currentLine.includes(keywords[6])) {
+                    innovationPositiveSection = true;
+                    innovationNegativeSection = false;
+                    innovationIndex++;
+                    continue;
+                }
+
+                // 检测是否进入负向减分项部分
+                if (currentLine.includes(keywords[7])) {
+                    innovationPositiveSection = false;
+                    innovationNegativeSection = true;
+                    innovationIndex++;
+                    continue;
+                }
+
+                // 处理正向加分项
+                if (innovationPositiveSection && !currentLine.includes(keywords[8])) {
+                    const parts = currentLine.split(/\.\s+/, 2);
+                    if (parts.length > 1) {
+                    innovation_positiveItems.push(parts[1].trim());
+                    console.log("正向加分项:", parts[1].trim());
+                    }
+                }
+
+                // 处理负向减分项
+                if (innovationNegativeSection && !currentLine.includes(keywords[8])) {
+                    const parts = currentLine.split(/\.\s+/, 2);
+                    if (parts.length > 1) {
+                    innovation_negativeItems.push(parts[1].trim());
+                    console.log("负向减分项:", parts[1].trim());
+                    }
+                }
+
+                // 处理得分
+                if (currentLine.includes(keywords[8])) {
+                    const parts = currentLine.split("：");
+                    if (parts.length > 1) {
+                    innovationScore = parts[1].trim().substring(0, 5);
+                    console.log("得分:",innovationScore);
+                    }
+                    innovationPositiveSection = false;
+                    innovationNegativeSection = false;
+                    
+                    return;
+                }
+                // 检测是否离开当前部分
+                if (currentLine.includes(keywords[12])) {
+                    break;
+                }
+                innovationIndex++;
+                }
+                break;
+            default:
+            console.log("无关行")
+            }
+        }
+    } 
 
     // 添加到历史对话
     function addToHistory(userAnswer, aiQuestion) {
@@ -1007,11 +1591,140 @@
     
     // 上传简历
     function gotoresume() {
-        window.location.href = "resume.html";
+        document.getElementById('resumeUploadModal').classList.remove('hidden');
+    }
+    
+    // 关闭简历上传弹窗
+    function closeResumeModal() {
+        document.getElementById('resumeUploadModal').classList.add('hidden');
+        // // 重置表单
+        // document.getElementById('uploadForm').reset();
+        // document.getElementById('imagePreview').classList.add('hidden');
+    }
+
+    // 修改图片预览功能
+    document.getElementById('resumeImage').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('imagePreview');
+                preview.src = e.target.result;
+                preview.classList.remove('hidden');
+                // 更新上传区域样式
+                document.querySelector('.upload-area').classList.add('border-primary');
+                isUpload =true
+                // 自动提交分析
+                closeResumeModal();
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // 添加拖拽上传功能
+    const uploadArea = document.querySelector('.upload-area');
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        uploadArea.addEventListener(eventName, preventDefaults, false);
+    });
+
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+        uploadArea.addEventListener(eventName, highlight, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+        uploadArea.addEventListener(eventName, unhighlight, false);
+    });
+
+    function highlight(e) {
+        uploadArea.classList.add('border-primary');
+    }
+
+    function unhighlight(e) {
+        uploadArea.classList.remove('border-primary');
+    }
+
+    uploadArea.addEventListener('drop', handleDrop, false);
+
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const file = dt.files[0];
+        
+        if (file && file.type.startsWith('image/')) {
+            const input = document.getElementById('resumeImage');
+            input.files = dt.files;
+            // 触发change事件
+            const event = new Event('change');
+            input.dispatchEvent(event);
+        }
+    }
+
+    // 修改提交简历分析函数
+    async function submitResume() {
+        const imageFile = document.getElementById('resumeImage').files[0];
+
+        if (!imageFile) {
+            return;
+        }
+
+        // 更新进度条到简历分析步
+
+        const formData = new FormData();
+        formData.append('file', imageFile);
+        formData.append('question', '分析我的简历');
+
+        try {
+            const response = await fetch('http://localhost:8086/api/resume/analyze', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                const result = await response.text();
+                analysisResult =result
+            } else {
+                throw new Error('分析失败，请稍后重试');
+            }
+        } catch (error) {
+            alert('分析失败：' + error.message);
+        } finally {
+            // 隐藏加载状态
+            // document.getElementById('uploadLoading').classList.add('hidden');
+        }
+    }
+    function resetUploadForm() {
+        const form = document.getElementById('resumeUploadModal');
+        // form.reset(); // 重置所有表单字段
+        document.getElementById('imagePreview').classList.add('hidden');
+        document.getElementById('imagePreview').src = ''; // 清空预览图
+        document.querySelector('.upload-area').classList.remove('border-primary');
+        isUpload = false; // 重置上传状态
     }
     
     // 初始化页面
     document.addEventListener('DOMContentLoaded', init);
+
+    // 进度条控制函数
+    function updateProgress(step) {
+        const steps = document.querySelectorAll('.step');
+        const lines = document.querySelectorAll('.step-line');
+        
+        // 重置所有步骤
+        steps.forEach(s => s.classList.remove('active'));
+        lines.forEach(l => l.classList.remove('active'));
+        
+        // 激活当前步骤及之前的步骤
+        for(let i = 0; i <= step; i++) {
+            steps[i].classList.add('active');
+            if(i < step) {
+                lines[i].classList.add('active');
+            }
+        }
+    }
 </script>
 </body>
 </html>
